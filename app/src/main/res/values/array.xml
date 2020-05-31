@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="weekday">
+        <item>사용 안 함</item>
+        <item>매일</item>
+        <item>매주</item>
+        <item>매월</item>
+        <item>요일 선택</item>
+    </string-array>
+
+
+</resources>
