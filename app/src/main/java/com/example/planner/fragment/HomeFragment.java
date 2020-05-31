@@ -75,7 +75,7 @@ public class HomeFragment extends Fragment {
 
     boolean isAnimating = false;
 
-    private Plans nowTimePlan;
+    private Plans nowTimePlan, nextTimePlan;
 
     public HomeFragment() {
 
@@ -146,6 +146,9 @@ public class HomeFragment extends Fragment {
                     timerActivity.putExtra("startTime", nowTimePlan.getStartTime());
                     timerActivity.putExtra("endTime", nowTimePlan.getEndTime());
                     timerActivity.putExtra("duration", nowTimePlan.getDuration());
+                    if(nextTimePlan != null){
+                        timerActivity.putExtra("next", nextTimePlan.getStartTime());
+                    }
                     startActivity(timerActivity);
                 }
             }
@@ -405,9 +408,20 @@ public class HomeFragment extends Fragment {
 
         SimpleDateFormat transFormat = new SimpleDateFormat("EE, MM월 dd일 yyyy년");
 
+
         Plans nowPlan = realm.where(Plans.class).equalTo("timeText",transFormat.format(new Date()))
                 .lessThanOrEqualTo("startTime",new Date())
                 .greaterThanOrEqualTo("endTime",new Date()).findFirst();
+//
+//        Plans nowPlan = plansRealmResults.where()
+//                .lessThanOrEqualTo("startTime",new Date())
+//                .greaterThanOrEqualTo("endTime",new Date()).findFirst();
+
+        if(nowPlan != null){
+            nextTimePlan = plansRealmResults.where().greaterThan("startTime",nowPlan.getEndTime()).findFirst();
+
+        }
+
 
         return nowPlan;
     }

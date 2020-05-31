@@ -89,7 +89,7 @@ public class FocusDialog extends Dialog{
         mDialogOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(),"Okay" ,Toast.LENGTH_SHORT).show();
+             //   Toast.makeText(getContext(),"Okay" ,Toast.LENGTH_SHORT).show();
                 int value = Integer.parseInt(focusText.getText().toString());
                 customDialogListener.onPositiveClicked(true,value);
                 dialog.cancel();

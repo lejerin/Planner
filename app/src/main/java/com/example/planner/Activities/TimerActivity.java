@@ -6,17 +6,22 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.planner.Helpers.FocusDialog;
+import com.example.planner.Helpers.FocusFinishDialog;
 import com.example.planner.Helpers.FocusTimerDialog;
 import com.example.planner.R;
 import com.example.planner.Realm.Plans;
 import com.example.planner.TimerView;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -28,7 +33,7 @@ import io.realm.Realm;
 public class TimerActivity extends AppCompatActivity {
 
     private TimerView timer;
-    private TextView hourTxt,minTxt,secTxt,timerTitle,timerStart,timerEnd;
+    private TextView hourTxt,minTxt,secTxt,timerTitle,timerStart,timerEnd, chance;
 
     private int id;
     private int duration;
@@ -37,8 +42,10 @@ public class TimerActivity extends AppCompatActivity {
 
     FocusDialog focusDialog;
 
-    private Date startPlanTime;
+    private Date startPlanTime, nextPlanStartTime;
 
+    private int extendChance = 0;
+    String timeText;
 
     private CountDownTimer countDownTimer;
     @Override
@@ -57,16 +64,18 @@ public class TimerActivity extends AppCompatActivity {
 
         id = getIntent().getExtras().getInt("id");
         String title = getIntent().getExtras().getString("title");
-        String timeText = getIntent().getExtras().getString("timeText");
+        timeText = getIntent().getExtras().getString("timeText");
         Date startTime = (Date)getIntent().getSerializableExtra("startTime");
         Date endTime = (Date)getIntent().getSerializableExtra("endTime");
         duration = getIntent().getExtras().getInt("duration");
+        nextPlanStartTime = (Date)getIntent().getSerializableExtra("next");
 
 
         //시작 시간 기록
         startPlanTime = new Date();
 
         timer = (TimerView) findViewById(R.id.timer);
+        chance = (TextView) findViewById(R.id.chanceText);
         hourTxt = (TextView) findViewById(R.id.timer_hour);
         minTxt = (TextView) findViewById(R.id.timer_min);
         secTxt = (TextView) findViewById(R.id.timer_sec);
@@ -79,6 +88,7 @@ public class TimerActivity extends AppCompatActivity {
         timerTitle.setText(title);
         timerStart.setText(changeDateToStr(startTime));
         timerEnd.setText(changeDateToStr(endTime));
+
 
         initializeTimer(duration);
 
@@ -116,6 +126,8 @@ public class TimerActivity extends AppCompatActivity {
 //
 //            }
 //        }, duration*1000);
+
+
     }
 
     public void countDown(final int duration) {
@@ -185,43 +197,164 @@ public class TimerActivity extends AppCompatActivity {
     //시간 종료 되었을 때
     private void finishTime(){
 
-        FocusTimerDialog focusTimerDialog = new FocusTimerDialog(TimerActivity.this);
-        focusTimerDialog.setDialogListener(new FocusTimerDialog.TimerDialogListener() {
-            @Override
-            public void onPositiveClicked(Boolean isOk, final int focus) {
-                if (isOk) {
-                    System.out.println("저장");
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
+        if(extendChance < 3) {
+
+            FocusTimerDialog focusTimerDialog = new FocusTimerDialog(TimerActivity.this);
+            focusTimerDialog.setDialogListener(new FocusTimerDialog.TimerDialogListener() {
+                @Override
+                public void onPositiveClicked(Boolean isOk, final int focus) {
+                    if (isOk) {
+                        System.out.println("저장");
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
 
 
-                            Plans plan = realm.where(Plans.class).equalTo("id", id).findFirst();
-                            plan.setSuccess(1);
-                            plan.setFocus(focus);
-                            plan.setStartTime(startPlanTime);
-                            plan.setEndTime(new Date());
-                            finish();
+                                Plans plan = realm.where(Plans.class).equalTo("id", id).findFirst();
+                                plan.setSuccess(1);
+                                plan.setFocus(focus);
+                                plan.setStartTime(startPlanTime);
+                                plan.setEndTime(new Date());
+                                finish();
 
+                            }
+                        });
+
+
+                    }
+                }
+
+                @Override
+                public void onExtendClicked(Boolean isExtend) {
+                    System.out.println("연장 시도");
+                    //다음 계획 시간 여유있으면 10분 연장하기
+
+                    if (nextPlanStartTime == null) {
+                        //자정에 날짜 바뀌는지
+                        if (getTodayLastTime().getTime() - new Date().getTime() > 10 * 60 * 1000) {
+                            //자정까지 10분 여유있음
+                            System.out.println("연장 가능");
+                            Handler mHandler = new Handler(Looper.getMainLooper());
+                            mHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // 내용
+                                    initializeTimer(10*60);
+                                    extendChance += 1;
+                                    chance.setText(3 - extendChance + "");
+                                }
+                            }, 0);
+
+                        } else {
+                            //showMessage("곧 자정이므로 연장이 불가합니다");
+                            showFocusFinishDialog();
                         }
-                    });
+
+                    } else {
+                        //10분 여유있는지 체크
+                        if (nextPlanStartTime.getTime() - new Date().getTime() > 10 * 60 * 1000) {
+                            Handler mHandler = new Handler(Looper.getMainLooper());
+                            mHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // 내용
+                                    initializeTimer(10*60);
+                                    extendChance += 1;
+                                    chance.setText(3 - extendChance + "");
+                                }
+                            }, 0);
+                        } else {
+                            //showMessage("다음 일정으로 연장이 불가합니다");
+                            showFocusFinishDialog();
+                        }
+                    }
 
 
                 }
-            }
+            });
+            focusTimerDialog.showDialog();
 
-            @Override
-            public void onExtendClicked(Boolean isExtend) {
-                System.out.println("연장");
-
-
-            }
-        });
-        focusTimerDialog.showDialog();
-
-
+        }else{
+            System.out.println("연장 불가");
+            showFocusFinishDialog();
+        }
 
     }
+
+
+    private void showFocusFinishDialog(){
+        //마지막 연장까지 끝나서 최종 집중도 팝업
+        System.out.println("마지막 팝업");
+
+                FocusFinishDialog focusTimerDialog = new FocusFinishDialog(TimerActivity.this);
+                focusTimerDialog.setSaveDialogListener(new FocusFinishDialog.SaveDialogListener() {
+                    @Override
+                    public void onPositiveClicked(Boolean isOk, final int focus) {
+                        if (isOk) {
+                            System.out.println("저장");
+                            Handler mHandler = new Handler(Looper.getMainLooper());
+                            mHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // 내용
+                                    realm.executeTransaction(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm) {
+
+
+                                            Plans plan = realm.where(Plans.class).equalTo("id", id).findFirst();
+                                            //포기
+                                            plan.setSuccess(2);
+                                            plan.setFocus(focus);
+                                            plan.setStartTime(startPlanTime);
+                                            plan.setEndTime(new Date());
+                                            finish();
+
+                                        }
+                                    });
+                                }
+                            }, 0);
+
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onSaveClicked(Boolean isExtend) {
+                        //30초동안 입력이 없어서 자동 저장
+                        Handler mHandler = new Handler(Looper.getMainLooper());
+                        mHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                // 내용
+                                realm.executeTransaction(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+
+
+                                        Plans plan = realm.where(Plans.class).equalTo("id", id).findFirst();
+                                        //포기
+                                        plan.setSuccess(2);
+                                        //집중력 입력이 없으므로 임의 중간값?
+                                        plan.setFocus(50);
+                                        plan.setStartTime(startPlanTime);
+                                        plan.setEndTime(new Date());
+                                        finish();
+
+                                    }
+                                });
+                            }
+                        }, 0);
+
+
+                    }
+                });
+                focusTimerDialog.showDialog();
+
+    }
+
+
 
     private void showFocusDialog(final Boolean isSuccess){
 
@@ -264,5 +397,22 @@ public class TimerActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         countDownTimer.cancel();
+    }
+
+    private void showMessage(String message) {
+        Toast.makeText(this,message,Toast.LENGTH_LONG).show();
+    }
+
+    //String -> Date
+    private Date getTodayLastTime(){
+        String from = timeText  + " 23:59:59";
+        SimpleDateFormat fm = new SimpleDateFormat("EE, MM월 dd일 yyyy년 HH:mm:ss");
+        try {
+            return  fm.parse(from);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return new Date();
     }
 }

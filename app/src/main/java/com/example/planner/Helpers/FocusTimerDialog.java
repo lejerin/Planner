@@ -91,7 +91,7 @@ public class FocusTimerDialog extends Dialog{
         mDialogOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(),"Okay" ,Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getContext(),"Okay" ,Toast.LENGTH_SHORT).show();
                 timerDialogListener.onPositiveClicked(true,Integer.parseInt(focusText.getText().toString()));
                 dismissTimer.cancel();
                 dialog.cancel();
@@ -102,7 +102,7 @@ public class FocusTimerDialog extends Dialog{
         mDialgExtend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,"연장됩니다",Toast.LENGTH_LONG).show();
+             //   Toast.makeText(context,"연장됩니다",Toast.LENGTH_LONG).show();
                 timerDialogListener.onExtendClicked(true);
                 dismissTimer.cancel();
                 dialog.cancel();
@@ -115,7 +115,7 @@ public class FocusTimerDialog extends Dialog{
 
             public void run() {
 
-                Toast.makeText(context,"제한시간 30초를 초과하여 자동 연장됩니다",Toast.LENGTH_LONG).show();
+               // Toast.makeText(context,"제한시간 30초를 초과하여 자동 연장됩니다",Toast.LENGTH_LONG).show();
                 timerDialogListener.onExtendClicked(true);
                 dialog.cancel();
 
