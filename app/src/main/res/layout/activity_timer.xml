@@ -96,9 +96,9 @@
         android:gravity="center"
         android:text="AM 10:00"
         android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView9"
-        app:layout_constraintEnd_toStartOf="@+id/textView9"
-        app:layout_constraintTop_toTopOf="@+id/textView9" />
+        app:layout_constraintBottom_toBottomOf="@+id/recomendTime"
+        app:layout_constraintEnd_toStartOf="@+id/recomendTime"
+        app:layout_constraintTop_toTopOf="@+id/recomendTime" />
 
     <TextView
         android:id="@+id/timerEnd"
@@ -108,12 +108,12 @@
         android:gravity="center"
         android:text="AM 11:00"
         android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView9"
-        app:layout_constraintStart_toEndOf="@+id/textView9"
-        app:layout_constraintTop_toTopOf="@+id/textView9" />
+        app:layout_constraintBottom_toBottomOf="@+id/recomendTime"
+        app:layout_constraintStart_toEndOf="@+id/recomendTime"
+        app:layout_constraintTop_toTopOf="@+id/recomendTime" />
 
     <TextView
-        android:id="@+id/textView9"
+        android:id="@+id/recomendTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="-"
@@ -156,13 +156,14 @@
 
     <TextView
         android:id="@+id/chanceText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="6dp"
+        android:textSize="18dp"
         android:text="3"
         app:layout_constraintBottom_toTopOf="@+id/timer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+        app:layout_constraintTop_toBottomOf="@+id/recomendTime" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

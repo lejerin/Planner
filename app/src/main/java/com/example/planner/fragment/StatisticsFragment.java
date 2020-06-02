@@ -36,7 +36,7 @@ public class StatisticsFragment extends Fragment {
         viewPager = view.findViewById(R.id.viewPager);
 
         final TabLayout tabLayout = view.findViewById(R.id.tabLayout);
-        tabLayout.addTab(tabLayout.newTab().setText("일"));
+        //tabLayout.addTab(tabLayout.newTab().setText("일"));
         tabLayout.addTab(tabLayout.newTab().setText("주"));
         tabLayout.addTab(tabLayout.newTab().setText("월"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);

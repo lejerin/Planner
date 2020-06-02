@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -47,7 +48,7 @@ public class HomeFragment extends Fragment {
     //원형 그래프(PieChart): MpAndroidChart 라이브러리 사용 https://github.com/PhilJay/MPAndroidChart
     //Canvas로 직접 그리는 방법 구현하다가 글씨 추가를 못해서 지움 : Helpers.PieChartView
     private PieChart pieChart;
-    private Button timerBtn;
+    private RelativeLayout timerBtn;
 
     //Realm DB
     private Realm realm;
@@ -66,7 +67,7 @@ public class HomeFragment extends Fragment {
     private TextView holeTextView,timeStatus, timeTop, timeRight, timeBottom, timeLeft;
     private String todayNotYear= "";
 
-
+    private TextView startPlanTitle;
 
     //test
     private PieChart amPie;
@@ -100,7 +101,7 @@ public class HomeFragment extends Fragment {
         timeLeft = view.findViewById(R.id.timeLeft);
         timeStatus = view.findViewById(R.id.timeStatus);
         timerBtn = view.findViewById(R.id.timerBtn);
-
+        startPlanTitle = view.findViewById(R.id.startPlanTitle);
 
         amPie.setTouchEnabled(false);
         pmPie.setTouchEnabled(false);
@@ -120,10 +121,13 @@ public class HomeFragment extends Fragment {
         //현재 시간과 일치하는 일정 찾기
         nowTimePlan = findNowPlan();
         timerBtn.setVisibility(View.INVISIBLE);
+        startPlanTitle.setVisibility(View.INVISIBLE);
         if(nowTimePlan != null ){
             if(nowTimePlan.getSuccess() == 0){
                 //아직 시도안한 계획이면
                 timerBtn.setVisibility(View.VISIBLE);
+                startPlanTitle.setVisibility(View.VISIBLE);
+                startPlanTitle.setText(nowTimePlan.getTitle() + " 타이머를 시작해주세요");
             }
         }
 

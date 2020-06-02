@@ -6,17 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".Activities.MakePlanActivity">
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/makePlanTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="8dp"
-        android:background="@color/transparent"
-        android:ems="10"
-        android:hint="계획 이름"
-        android:inputType="textPersonName"
+        android:completionThreshold="1"
+        android:hint="계획 이름을 입력해주세요"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/makePlanbackBtn" />
@@ -26,6 +24,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:background="@color/transparent"
         android:padding="8dp"
         android:scaleType="fitCenter"
@@ -37,7 +36,7 @@
         android:id="@+id/makePlanDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="30dp"
         android:text="수, 05월13일"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -90,27 +89,27 @@
         app:layout_constraintStart_toEndOf="@+id/makePlanDate"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:text="반복 설정"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/startTimeBtn" />
+<!--    <TextView-->
+<!--        android:id="@+id/textView4"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:layout_marginTop="32dp"-->
+<!--        android:text="반복 설정"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/startTimeBtn" />-->
 
-    <Spinner
-        android:id="@+id/planSpinner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:entries="@array/weekday"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView4"
-        app:layout_constraintTop_toTopOf="@+id/textView4" />
+<!--    <Spinner-->
+<!--        android:id="@+id/planSpinner"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:entries="@array/weekday"-->
+<!--        android:layout_marginEnd="8dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/textView4"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/textView4"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/textView4" />-->
 
     <TextView
         android:id="@+id/saveBtn"

@@ -3,6 +3,7 @@ package com.example.planner.fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,7 @@ public class PlanFragment extends Fragment{
      */
 
     private static int MAKE_PLAN_ACTIVITY_CODE = 11;
+    private static int MODIFY_PLAN_ACTIVITY_CODE = 22;
 
     // 월간캘린더 MaterialCalendarView 라이브러리 사용 https://github.com/prolificinteractive/material-calendarview
     private MaterialCalendarView calendarView;
@@ -87,6 +89,8 @@ public class PlanFragment extends Fragment{
         ImageButton fb = view.findViewById(R.id.planAddBtn);
 
         realm = Realm.getDefaultInstance();
+
+
         //오늘 날짜 설정
         setSelectedDayTextView(new Date());
         SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM");
@@ -157,10 +161,13 @@ public class PlanFragment extends Fragment{
             public void onModifyClick(int pos) {
                 //수정 버튼 눌림
                 System.out.println("위치" + pos);
+
                 Intent makePlanActivity = new Intent(getContext(), MakePlanActivity.class);
                 makePlanActivity.putExtra("date",clickDate);
                 makePlanActivity.putExtra("isNew",pos);
-                startActivityForResult(makePlanActivity,MAKE_PLAN_ACTIVITY_CODE);
+                startActivityForResult(makePlanActivity,MODIFY_PLAN_ACTIVITY_CODE);
+
+
 
             }
         });
@@ -180,6 +187,8 @@ public class PlanFragment extends Fragment{
                             @Override
                             public void execute(Realm realm) {
                                 int finalpos = pos;
+                                int code = plansRealmResults.get(finalpos).getId();
+
                                 realm.where(Plans.class).equalTo("id",plansRealmResults.get(finalpos).getId()).findFirst()
                                         .deleteFromRealm();
                                 planRecylerView.getRecycledViewPool().clear();
@@ -188,6 +197,8 @@ public class PlanFragment extends Fragment{
                                 //not working
                                 setUpMonthPlanColor();
 
+                                //알림 예약 삭제
+                                ((HomeActivity)getActivity()).removeNotification(code);
 
                             }
                         });
@@ -281,9 +292,27 @@ public class PlanFragment extends Fragment{
             Plans plans = realm.where(Plans.class).equalTo("id", data.getExtras().getInt("id")).findFirst();
 
             Calendar cal = Calendar.getInstance();
-            cal.setTime(plans.getStartTime());
+            if(plans.getStartTime().getTime() - new Date().getTime() > 0){
+                cal.setTime(plans.getStartTime());
+                ((HomeActivity)getActivity()).diaryNotification(cal,plans.getId(),plans.getTitle());
+            }
 
-            ((HomeActivity)getActivity()).diaryNotification(cal,plans.getId(),plans.getTitle());
+
+        }else if(resultCode == 22){
+            setUpMonthPlanColor();
+
+
+            //알람예약하기
+            Plans plans = realm.where(Plans.class).equalTo("id", data.getExtras().getInt("id")).findFirst();
+
+            Calendar cal = Calendar.getInstance();
+            ((HomeActivity)getActivity()).removeNotification(plans.getId());
+
+            if(plans.getStartTime().getTime() - new Date().getTime() > 0){
+                cal.setTime(plans.getStartTime());
+                ((HomeActivity)getActivity()).diaryNotification(cal,plans.getId(),plans.getTitle());
+            }
+
 
         }
 

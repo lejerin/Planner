@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -15,13 +18,17 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.planner.Helpers.FocusDialog;
+import com.example.planner.Helpers.MakePlanSearchDialog;
 import com.example.planner.R;
 import com.example.planner.Realm.Plans;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import io.realm.Realm;
@@ -36,13 +43,13 @@ public class MakePlanActivity extends AppCompatActivity {
      */
 
 
-    private EditText planTitle;
+    private AutoCompleteTextView planTitle;
     private TextView makePlanDate,saveBtn;
     private Button startTimeBtn,endTimeBtn;
     private Spinner planSpinner;
     private String date;
     private Date startDate, endDate;
-    private RealmResults<Plans> plansRealmResults;
+    private RealmResults<Plans> plansRealmResults,getAllPlans;
 
     int pos = -1;
 
@@ -60,7 +67,7 @@ public class MakePlanActivity extends AppCompatActivity {
         makePlanDate = findViewById(R.id.makePlanDate);
         startTimeBtn = findViewById(R.id.startTimeBtn);
         endTimeBtn = findViewById(R.id.endTimeBtn);
-        planSpinner = findViewById(R.id.planSpinner);
+       // planSpinner = findViewById(R.id.planSpinner);
         saveBtn = findViewById(R.id.saveBtn);
         ImageButton makePlanbackBtn = findViewById(R.id.makePlanbackBtn);
 
@@ -68,8 +75,45 @@ public class MakePlanActivity extends AppCompatActivity {
         date = getIntent().getExtras().getString("date");
         makePlanDate.setText(date);
 
-
         Realm realm = Realm.getDefaultInstance();
+
+        final List<String> getTitle = new ArrayList<String>();
+        //자동완성 리스트 불러오기
+        getAllPlans = realm.where(Plans.class).findAll();
+
+        for(int i=0;i<getAllPlans.size();i++){
+            boolean isduple = false;
+            for(int j=0;j<getTitle.size();j++){
+                if(getTitle.get(j).equals(getAllPlans.get(i).getTitle())){
+                    isduple = true;
+                }
+            }
+            if(!isduple){
+                getTitle.add(getAllPlans.get(i).getTitle());
+            }
+        }
+
+        System.out.println("이름 리스트"+getTitle);
+
+        planTitle.setAdapter(new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, getTitle));
+
+        planTitle.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View arg1, int pos,
+                                    long id) {
+
+                System.out.println("클릭 리스트"+pos);
+                String name = planTitle.getText().toString();
+                showRecommendDialog(name);
+
+            }
+        });
+
+
+
+
         plansRealmResults = realm.where(Plans.class).equalTo("timeText",date)
                 .sort("startTime", Sort.ASCENDING).findAll();
 
@@ -100,7 +144,13 @@ public class MakePlanActivity extends AppCompatActivity {
                     saveDB();
                     Intent intent = new Intent();
                     intent.putExtra("id", planId);
-                    setResult(11, intent);
+
+                    if(pos > -1){
+                        setResult(22, intent);
+                    }else{
+                        setResult(11, intent);
+                    }
+
                     finish();
                 }
             }
@@ -174,14 +224,76 @@ public class MakePlanActivity extends AppCompatActivity {
 
     }
 
+
+    private void showRecommendDialog(String name){
+
+        System.out.println("클릭" + name);
+
+        RealmResults<Plans> rp = getAllPlans.where().equalTo("title",name).findAll();
+        //다이얼로그어댑터
+        int success = 0;
+        int successCount = 0;
+        int fail = 0;
+        int failCount = 0;
+        int notStart = 0;
+        int notStartCount = 0;
+
+        for(int i=0;i<rp.size();i++){
+            if(rp.get(i).getSuccess() == 1){
+                success += (rp.get(i).getDuration()*(rp.get(i).getFocus()/(float)100));
+                successCount++;
+            }else if(rp.get(i).getSuccess() == 2){
+                fail += (rp.get(i).getDuration()*(rp.get(i).getFocus()/(float)100));
+                failCount++;
+            }else{
+                notStart += (rp.get(i).getDuration());
+                notStartCount++;
+            }
+        }
+
+
+        int recomendTime = 0;
+        if(success != 0){
+            recomendTime = success/successCount;
+        }else{
+            if(fail != 0){
+                recomendTime = fail/failCount;
+            }else{
+                recomendTime = notStart/notStartCount;
+            }
+        }
+
+
+        MakePlanSearchDialog makePlanSearchDialog = new MakePlanSearchDialog(MakePlanActivity.this,rp,recomendTime);
+        makePlanSearchDialog.showDialog();
+
+
+    }
+
+
     //시작시간과 종료시간이 기존 다른 계획과 겹치는지 확인
     private boolean checkTimeDuple(Date check){
 
         for(int i=0;i<plansRealmResults.size();i++){
-            if(plansRealmResults.get(i).getStartTime().getTime() <= check.getTime()
-                    && plansRealmResults.get(i).getEndTime().getTime() >= check.getTime()){
-                return false;
+
+            if(pos > -1){
+                //수정이면 자신을 제외하고 겹치지 않으면 괜찮음
+                if(planId != plansRealmResults.get(i).getId()){
+                    if(plansRealmResults.get(i).getStartTime().getTime() <= check.getTime()
+                            && plansRealmResults.get(i).getEndTime().getTime() >= check.getTime()){
+                        return false;
+                    }
+                }
+
+
+            }else{
+                if(plansRealmResults.get(i).getStartTime().getTime() <= check.getTime()
+                        && plansRealmResults.get(i).getEndTime().getTime() >= check.getTime()){
+                    return false;
+                }
             }
+
+
         }
 
 
@@ -240,6 +352,7 @@ public class MakePlanActivity extends AppCompatActivity {
 
         }else{
             //수정
+            //이미 완료한 작업은 수정못하도록 해야함
 
 
             realm.executeTransaction(new Realm.Transaction() { @Override public void execute(Realm realm) {
@@ -254,6 +367,8 @@ public class MakePlanActivity extends AppCompatActivity {
                 long diff =  endDate.getTime() - startDate.getTime();
                 int sec = (int) (diff / 1000);
                 plansRealmResults.get(pos).setDuration(sec);
+
+
             }
             } );
 

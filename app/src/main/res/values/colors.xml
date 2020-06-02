@@ -8,6 +8,9 @@
     <color name="red">#E91E1E</color>
     <color name="timer_circle">#2ebfca</color>
 
+    <color name="stack_negative">#ababab</color>
+    <color name="stack_positive">#FD9ABC</color>
+
     <color name="seek_bar_background">#ababab</color>
     <color name="seek_bar_progress">#ffb600</color>
     <color name="seek_bar_secondary_progress">#3399CC</color>

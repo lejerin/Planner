@@ -115,16 +115,42 @@
         app:layout_constraintEnd_toEndOf="@+id/timeTop"
         app:layout_constraintStart_toStartOf="@+id/timeTop" />
 
-    <Button
+    <RelativeLayout
         android:id="@+id/timerBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="타이머"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:background="@drawable/timer_btn_style"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/timeStatus"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:background="@color/transparent"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/play"
+            android:tint="@color/colorAccent" />
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/startPlanTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/timerBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

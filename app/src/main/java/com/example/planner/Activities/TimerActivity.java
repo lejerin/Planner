@@ -196,6 +196,7 @@ public class TimerActivity extends AppCompatActivity {
 
     //시간 종료 되었을 때
     private void finishTime(){
+        focusDialog.cancelDialog();
 
         if(extendChance < 3) {
 
@@ -213,6 +214,7 @@ public class TimerActivity extends AppCompatActivity {
                                 Plans plan = realm.where(Plans.class).equalTo("id", id).findFirst();
                                 plan.setSuccess(1);
                                 plan.setFocus(focus);
+                                plan.setDuration(getNewDuration(new Date()));
                                 plan.setStartTime(startPlanTime);
                                 plan.setEndTime(new Date());
                                 finish();
@@ -306,6 +308,7 @@ public class TimerActivity extends AppCompatActivity {
                                             //포기
                                             plan.setSuccess(2);
                                             plan.setFocus(focus);
+                                            plan.setDuration(getNewDuration(new Date()));
                                             plan.setStartTime(startPlanTime);
                                             plan.setEndTime(new Date());
                                             finish();
@@ -338,6 +341,7 @@ public class TimerActivity extends AppCompatActivity {
                                         plan.setSuccess(2);
                                         //집중력 입력이 없으므로 임의 중간값?
                                         plan.setFocus(50);
+                                        plan.setDuration(getNewDuration(new Date()));
                                         plan.setStartTime(startPlanTime);
                                         plan.setEndTime(new Date());
                                         finish();
@@ -378,6 +382,7 @@ public class TimerActivity extends AppCompatActivity {
                                 plan.setSuccess(2);
                                 plan.setFocus(focus);
                             }
+                            plan.setDuration(getNewDuration(new Date()));
                             plan.setStartTime(startPlanTime);
                             plan.setEndTime(new Date());
                             finish();
@@ -415,4 +420,11 @@ public class TimerActivity extends AppCompatActivity {
 
         return new Date();
     }
+
+    private int getNewDuration(Date endDate){
+        long diff =  endDate.getTime() - startPlanTime.getTime();
+        int sec = (int) (diff / 1000);
+        return sec;
+    }
+
 }

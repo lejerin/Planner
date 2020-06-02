@@ -13,7 +13,7 @@ import com.example.planner.fragment.WeekStatFragment;
 public class PagerAdapter extends FragmentStatePagerAdapter {
 
     int mNumOfTabs;
-    DayStatFragment tab1 = new DayStatFragment();
+    //DayStatFragment tab1 = new DayStatFragment();
     WeekStatFragment tab2 = new WeekStatFragment();
     MonthStatFragment tab3 = new MonthStatFragment();
 
@@ -27,14 +27,12 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                return tab1;
-            case 1:
                 return tab2;
-            case 2:
+            case 1:
                 return tab3;
 
             default:
-                return tab1;
+                return tab2;
         }
     }
 

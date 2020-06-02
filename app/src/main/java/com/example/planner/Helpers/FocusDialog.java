@@ -100,4 +100,12 @@ public class FocusDialog extends Dialog{
         dialog.show();
     }
 
+
+    public void cancelDialog(){
+       if(dialog.isShowing()){
+           dialog.cancel();
+       }
+
+
+    }
 }

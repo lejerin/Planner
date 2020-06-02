@@ -6,6 +6,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -133,6 +135,7 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 } else {
                     //API 23 이상
+
                     alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
                 }
             }
@@ -153,6 +156,20 @@ public class HomeActivity extends AppCompatActivity {
 //                    PackageManager.DONT_KILL_APP);
 //        }
     }
+
+    public void removeNotification(int code){
+
+        AlarmManager alarmManager = (AlarmManager)
+                getSystemService(Context.ALARM_SERVICE);
+        Intent myIntent = new Intent(getApplicationContext(),
+                AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                getApplicationContext(), code, myIntent, 0);
+
+        alarmManager.cancel(pendingIntent);
+
+    }
+
 
 
 }
