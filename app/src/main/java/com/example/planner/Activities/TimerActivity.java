@@ -89,8 +89,9 @@ public class TimerActivity extends AppCompatActivity {
         timerStart.setText(changeDateToStr(startTime));
         timerEnd.setText(changeDateToStr(endTime));
 
-
-        initializeTimer(duration);
+        long diff =  endTime.getTime() - startPlanTime.getTime();
+        int sec = (int) (diff / 1000);
+        initializeTimer(sec);
 
 
 
@@ -196,7 +197,11 @@ public class TimerActivity extends AppCompatActivity {
 
     //시간 종료 되었을 때
     private void finishTime(){
-        focusDialog.cancelDialog();
+
+        if(focusDialog != null){
+            focusDialog.cancelDialog();
+        }
+
 
         if(extendChance < 3) {
 
