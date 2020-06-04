@@ -263,7 +263,7 @@ public class PostActivity extends AppCompatActivity {
                     .into(popupUserImage);
         }else{
             Glide.with(this)
-                    .load(R.drawable.profile)
+                    .load(R.drawable.success_emotion)
                     .apply(new RequestOptions().centerCrop().circleCrop())
                     .into(popupUserImage);
         }
@@ -276,49 +276,70 @@ public class PostActivity extends AppCompatActivity {
                 popupProgressBar.setVisibility(View.VISIBLE);
 
                 if(!popupTitle.getText().toString().isEmpty()
-                        && !popupDescription.toString().isEmpty()
-                        && pickedImgUri != null){
+                        && !popupDescription.toString().isEmpty()){
 
-                    //파이어베이스 저장
-                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("blog_images");
-                    final StorageReference imageFilePath = storageReference.child(pickedImgUri.getLastPathSegment());
-                    imageFilePath.putFile(pickedImgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
 
-                                    String imageDownloadLink = uri.toString();
+                    if(pickedImgUri != null){
+                        //파이어베이스 저장
+                        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("blog_images");
+                        final StorageReference imageFilePath = storageReference.child(pickedImgUri.getLastPathSegment());
+                        imageFilePath.putFile(pickedImgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
 
-                                    if(currentUser.getPhotoUrl() != null){
-                                        Post post = new Post(popupTitle.getText().toString(),
-                                                popupDescription.getText().toString(),
-                                                imageDownloadLink,
-                                                currentUser.getUid(),
-                                                currentUser.getPhotoUrl().toString());
-                                        addPost(post);
-                                    }else{
-                                        Post post = new Post(popupTitle.getText().toString(),
-                                                popupDescription.getText().toString(),
-                                                imageDownloadLink,
-                                                currentUser.getUid(),null);
-                                        addPost(post);
+                                        String imageDownloadLink = uri.toString();
+
+                                        if(currentUser.getPhotoUrl() != null){
+                                            Post post = new Post(popupTitle.getText().toString(),
+                                                    popupDescription.getText().toString(),
+                                                    imageDownloadLink,
+                                                    currentUser.getUid(),
+                                                    currentUser.getPhotoUrl().toString());
+                                            addPost(post);
+                                        }else{
+                                            Post post = new Post(popupTitle.getText().toString(),
+                                                    popupDescription.getText().toString(),
+                                                    imageDownloadLink,
+                                                    currentUser.getUid(),null);
+                                            addPost(post);
+                                        }
+
+
+
                                     }
-
-
-
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    showMessage(e.getMessage());
-                                    popupProgressBar.setVisibility(View.INVISIBLE);
-                                    popupAddBtn.setVisibility(View.VISIBLE);
-                                }
-                            });
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        showMessage(e.getMessage());
+                                        popupProgressBar.setVisibility(View.INVISIBLE);
+                                        popupAddBtn.setVisibility(View.VISIBLE);
+                                    }
+                                });
+                            }
+                        });
+                    }else{
+                        //사진이 비어있으면
+                        if(currentUser.getPhotoUrl() != null){
+                            Post post = new Post(popupTitle.getText().toString(),
+                                    popupDescription.getText().toString(),
+                                    null,
+                                    currentUser.getUid(),
+                                    currentUser.getPhotoUrl().toString());
+                            addPost(post);
+                        }else{
+                            Post post = new Post(popupTitle.getText().toString(),
+                                    popupDescription.getText().toString(),
+                                    null,
+                                    currentUser.getUid(),null);
+                            addPost(post);
                         }
-                    });
+
+                    }
+
+
 
                 }else{
                     showMessage("Please Verify all fields and choose post img");

@@ -121,12 +121,10 @@ public class HomeFragment extends Fragment {
         //현재 시간과 일치하는 일정 찾기
         nowTimePlan = findNowPlan();
         timerBtn.setVisibility(View.INVISIBLE);
-        startPlanTitle.setVisibility(View.INVISIBLE);
         if(nowTimePlan != null ){
             if(nowTimePlan.getSuccess() == 0){
                 //아직 시도안한 계획이면
                 timerBtn.setVisibility(View.VISIBLE);
-                startPlanTitle.setVisibility(View.VISIBLE);
                 startPlanTitle.setText(nowTimePlan.getTitle() + " 타이머를 시작해주세요");
             }
         }
@@ -905,6 +903,40 @@ public class HomeFragment extends Fragment {
         timeStatus.setVisibility(View.VISIBLE);
 
     }
+
+
+//    private void checkIsEndDateOver(){
+//
+//        for(int i=0;i<plansRealmResults.size();i++){
+//            if(plansRealmResults.get(i).getSuccess() == 0){
+//                //미완
+//
+//                if(plansRealmResults.get(i).getEndTime().getTime() - new Date().getTime() <0){
+//                    //이미 시간 지난것
+//                    final int finalI = i;
+//                    realm.executeTransaction(new Realm.Transaction() {
+//                        @Override
+//                        public void execute(Realm realm) {
+//
+//                            Plans plan = realm.where(Plans.class).equalTo("id", plansRealmResults.get(finalI).getId()).findFirst();
+//                            //실패
+//                            plan.setSuccess(2);
+//                            plan.setFocus(50);
+//                            plan.setDuration(getNewDuration(new Date()));
+//                            plan.setStartTime(startPlanTime);
+//                            plan.setEndTime(new Date());
+//                            finish();
+//
+//                        }
+//                    });
+//                }
+//
+//            }
+//
+//        }
+//
+//    }
+
 
 
     private String changeDateToStr(Date date) {

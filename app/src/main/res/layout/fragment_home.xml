@@ -5,152 +5,182 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bgColor"
     tools:context=".fragment.HomeFragment">
 
-    <ImageView
-        android:id="@+id/imageView"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout3"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/title_layout_height"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="오늘의 계획"
+            android:textColor="@color/white"
+            android:textSize="@dimen/title_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/noti"
+        android:gravity="center"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
+
+        <TextView
+            android:id="@+id/startPlanTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="지금은 수행할 계획이 없습니다"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:id="@+id/timerBtn"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:visibility="invisible"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/timer_btn_style"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:background="@color/transparent"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/play"
+                android:tint="@color/colorAccent" />
+
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="32dp"
-        android:src="@drawable/tree"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/rounded_bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timeBottom" />
+        app:layout_constraintTop_toBottomOf="@+id/noti">
 
-    <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/piechart"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:background="@drawable/circle_plan_background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/piechart"
+            android:layout_width="280dp"
+            android:layout_height="280dp"
+            android:background="@drawable/circle_plan_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </com.github.mikephil.charting.charts.PieChart>
+        </com.github.mikephil.charting.charts.PieChart>
 
-    <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/AM"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:background="@drawable/circle_plan_background"
-        app:layout_constraintStart_toEndOf="@+id/piechart"
-        app:layout_constraintTop_toTopOf="parent">
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/PM"
+            android:layout_width="280dp"
+            android:layout_height="280dp"
+            android:layout_marginStart="270dp"
+            android:background="@drawable/circle_plan_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/piechart">
 
-    </com.github.mikephil.charting.charts.PieChart>
+        </com.github.mikephil.charting.charts.PieChart>
 
-    <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/PM"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:background="@drawable/circle_plan_background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/piechart">
+        <TextView
+            android:id="@+id/timeStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="ALL"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/timeTop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    </com.github.mikephil.charting.charts.PieChart>
+        <TextView
+            android:id="@+id/timeLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="6"
+            app:layout_constraintBottom_toBottomOf="@+id/piechart"
+            app:layout_constraintEnd_toStartOf="@+id/piechart"
+            app:layout_constraintTop_toTopOf="@+id/piechart" />
 
-    <TextView
-        android:id="@+id/timeBottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="12"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/piechart" />
+        <TextView
+            android:id="@+id/timeRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="6"
+            app:layout_constraintBottom_toBottomOf="@+id/piechart"
+            app:layout_constraintStart_toEndOf="@+id/piechart"
+            app:layout_constraintTop_toTopOf="@+id/piechart" />
 
-    <TextView
-        android:id="@+id/timeTop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="12"
-        app:layout_constraintBottom_toTopOf="@+id/piechart"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:id="@+id/timeBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="12"
+            app:layout_constraintEnd_toEndOf="@+id/piechart"
+            app:layout_constraintStart_toEndOf="@+id/timeLeft"
+            app:layout_constraintTop_toBottomOf="@+id/piechart" />
 
-    <TextView
-        android:id="@+id/timeLeft"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="6"
-        app:layout_constraintBottom_toBottomOf="@+id/piechart"
-        app:layout_constraintEnd_toStartOf="@+id/piechart"
-        app:layout_constraintTop_toTopOf="@+id/piechart" />
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/AM"
+            android:layout_width="280dp"
+            android:layout_height="280dp"
+            android:layout_marginStart="270dp"
+            android:background="@drawable/circle_plan_background"
+            app:layout_constraintStart_toStartOf="@+id/piechart"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/timeRight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="6"
-        app:layout_constraintBottom_toBottomOf="@+id/piechart"
-        app:layout_constraintStart_toEndOf="@+id/piechart"
-        app:layout_constraintTop_toTopOf="@+id/piechart" />
+        </com.github.mikephil.charting.charts.PieChart>
 
-    <TextView
-        android:id="@+id/selectTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="AM 10:00\n - \nAM 11:00"
-        app:layout_constraintBottom_toBottomOf="@+id/piechart"
-        app:layout_constraintEnd_toEndOf="@+id/piechart"
-        app:layout_constraintStart_toStartOf="@+id/piechart"
-        app:layout_constraintTop_toTopOf="@+id/piechart" />
+        <TextView
+            android:id="@+id/timeTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="12"
+            app:layout_constraintBottom_toTopOf="@+id/piechart"
+            app:layout_constraintEnd_toEndOf="@+id/piechart"
+            app:layout_constraintStart_toStartOf="@+id/piechart" />
 
-    <TextView
-        android:id="@+id/timeStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:text="ALL"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/timeTop"
-        app:layout_constraintEnd_toEndOf="@+id/timeTop"
-        app:layout_constraintStart_toStartOf="@+id/timeTop" />
-
-    <RelativeLayout
-        android:id="@+id/timerBtn"
-        android:layout_width="120dp"
-        android:layout_height="50dp"
-        android:background="@drawable/timer_btn_style"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/timeStatus"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:background="@color/transparent"
-            android:padding="10dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/play"
-            android:tint="@color/colorAccent" />
-
-
-    </RelativeLayout>
-
-    <TextView
-        android:id="@+id/startPlanTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:textSize="18dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/timerBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:id="@+id/selectTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="AM 10:00\n - \nAM 11:00"
+            app:layout_constraintBottom_toBottomOf="@+id/piechart"
+            app:layout_constraintEnd_toEndOf="@+id/piechart"
+            app:layout_constraintStart_toStartOf="@+id/piechart"
+            app:layout_constraintTop_toTopOf="@+id/piechart" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -147,7 +147,13 @@ public class PostDetailActivity extends AppCompatActivity {
         });
 
         String postImage = getIntent().getExtras().getString("postImage");
-        Glide.with(this).load(postImage).into(imgPost);
+        if(postImage != null){
+            Glide.with(this).load(postImage).into(imgPost);
+        }else{
+            imgPost.setVisibility(View.GONE);
+        }
+
+
 
         String postTitle = getIntent().getExtras().getString("title");
         txtPostTitle.setText(postTitle);
@@ -159,7 +165,7 @@ public class PostDetailActivity extends AppCompatActivity {
                     .apply(new RequestOptions().centerCrop().circleCrop())
                     .into(imgUserPost);
         }else{
-            Glide.with(this).load(R.drawable.profile)
+            Glide.with(this).load(R.drawable.success_emotion)
                     .apply(new RequestOptions().centerCrop().circleCrop())
                     .into(imgUserPost);
         }
@@ -178,7 +184,7 @@ public class PostDetailActivity extends AppCompatActivity {
                     .apply(new RequestOptions().centerCrop().circleCrop())
                     .into(imgCurrentUser);
         }else{
-            Glide.with(this).load(R.drawable.profile)
+            Glide.with(this).load(R.drawable.success_emotion)
                     .apply(new RequestOptions().centerCrop().circleCrop())
                     .into(imgCurrentUser);
         }
