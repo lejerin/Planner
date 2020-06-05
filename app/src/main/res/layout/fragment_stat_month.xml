@@ -53,14 +53,15 @@
                         android:layout_height="20dp"
                         android:layout_marginRight="5dp"
                         android:layout_weight="1"
-                        app:srcCompat="@drawable/time" />
+                        android:tint="@color/colorPrimary"
+                        app:srcCompat="@drawable/focus" />
 
                     <TextView
                         android:id="@+id/allTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="10:00:00" />
+                        android:text="0%" />
                 </LinearLayout>
 
                 <ProgressBar

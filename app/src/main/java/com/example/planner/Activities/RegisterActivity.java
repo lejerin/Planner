@@ -201,6 +201,9 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void successRegisterAccount() {
 
+
+
+
         Intent homeActivity = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(homeActivity);
         LoginActivity LA = (LoginActivity)LoginActivity._Login_Activity;

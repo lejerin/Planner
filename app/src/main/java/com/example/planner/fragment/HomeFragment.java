@@ -10,14 +10,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.planner.Activities.TimerActivity;
+import com.example.planner.Helpers.Tree;
 import com.example.planner.R;
 import com.example.planner.Realm.Plans;
+import com.example.planner.Realm.User;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
@@ -69,6 +72,8 @@ public class HomeFragment extends Fragment {
 
     private TextView startPlanTitle;
 
+    private ImageView tree;
+
     //test
     private PieChart amPie;
     private PieChart pmPie;
@@ -102,6 +107,7 @@ public class HomeFragment extends Fragment {
         timeStatus = view.findViewById(R.id.timeStatus);
         timerBtn = view.findViewById(R.id.timerBtn);
         startPlanTitle = view.findViewById(R.id.startPlanTitle);
+        tree = view.findViewById(R.id.tree);
 
         amPie.setTouchEnabled(false);
         pmPie.setTouchEnabled(false);
@@ -128,6 +134,14 @@ public class HomeFragment extends Fragment {
                 startPlanTitle.setText(nowTimePlan.getTitle() + " 타이머를 시작해주세요");
             }
         }
+
+
+        //사용자 보상 데이터 갖고오기
+        User user = realm.where(User.class).findFirst();
+        Tree treeData = new Tree();
+        tree.setImageResource(treeData.getNowTree(user.getSuccess(), user.getTime()));
+
+
 
         timerBtn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import com.example.planner.Helpers.MyYAxisValueFormatter;
 import com.example.planner.Helpers.SuccessStackedBarsMarkerView;
 import com.example.planner.Helpers.SuccessYAxisValueFormatter;
+import com.example.planner.Helpers.TimeMarkerView;
 import com.example.planner.R;
 import com.example.planner.Realm.Plans;
 import com.github.mikephil.charting.charts.BarChart;
@@ -164,7 +165,8 @@ public class MonthStatFragment extends Fragment {
 
         Calendar day = Calendar.getInstance();
 
-        float ft = 0.0f, nft = 0.0f;
+        float ft = 0.0f, af = 0.0f;
+        int allCount = 0;
 
 
         //1~7일 데이터
@@ -174,16 +176,16 @@ public class MonthStatFragment extends Fragment {
                 .lessThan("endTime",day.getTime()).findAll();
 
 
-        float thisfocustime = 0.0f;
-        float thisnotFocustime = 0.0f;
+        float thisTime = 0.0f;
+        float thisFocus = 0.0f;
         float thisSuccess = 0.0f;
         float thisFail = 0.0f;
 
         for(int i=0;i<thisday.size();i++){
             if(thisday.get(i).getSuccess() != 0){
 
-                thisfocustime += (thisday.get(i).getDuration()*(thisday.get(i).getFocus()/(float)100));
-                thisnotFocustime += (thisday.get(i).getDuration() - (thisday.get(i).getDuration()*(thisday.get(i).getFocus()/(float)100)));
+                thisTime += thisday.get(i).getDuration();
+                thisFocus += thisday.get(i).getFocus();
 
                 if(thisday.get(i).getSuccess() == 1){
                     thisSuccess += 1.0f;
@@ -195,16 +197,16 @@ public class MonthStatFragment extends Fragment {
 
         }
 
-        //집중시간만
-        values.add(new Entry(1, thisfocustime));
-        data.add(new BarEntry(0, new float[]{thisSuccess,thisFail}));
-        ft+= thisfocustime;
-        nft += thisnotFocustime;
 
+        values.add(new Entry(1, thisTime));
+        data.add(new BarEntry(0, new float[]{thisSuccess,thisFail}));
+        ft+= thisTime;
+        af += thisFocus;
+        allCount += thisday.size();
 
         //8일~14일 데이터
-        thisfocustime = 0.0f;
-        thisnotFocustime = 0.0f;
+        thisTime = 0.0f;
+        thisFocus = 0.0f;
         thisSuccess = 0.0f;
         thisFail = 0.0f;
 
@@ -218,8 +220,9 @@ public class MonthStatFragment extends Fragment {
         for(int i=0;i<thisday.size();i++){
             if(thisday.get(i).getSuccess() != 0){
 
-                thisfocustime += (thisday.get(i).getDuration()*(thisday.get(i).getFocus()/(float)100));
-                thisnotFocustime += (thisday.get(i).getDuration() - (thisday.get(i).getDuration()*(thisday.get(i).getFocus()/(float)100)));
+                thisTime += thisday.get(i).getDuration();
+                thisFocus += thisday.get(i).getFocus();
+
                 if(thisday.get(i).getSuccess() == 1){
                     thisSuccess += 1.0f;
                 }else{
@@ -231,15 +234,16 @@ public class MonthStatFragment extends Fragment {
         }
 
         //집중시간만
-        values.add(new Entry(2, thisfocustime));
+        values.add(new Entry(2, thisTime));
         data.add(new BarEntry(1, new float[]{thisSuccess,thisFail}));
-        ft+= thisfocustime;
-        nft += thisnotFocustime;
+        ft+= thisTime;
+        af += thisFocus;
+        allCount += thisday.size();
 
 
         //15일~21일 데이터
-        thisfocustime = 0.0f;
-        thisnotFocustime = 0.0f;
+        thisTime = 0.0f;
+        thisFocus = 0.0f;
         thisSuccess = 0.0f;
         thisFail = 0.0f;
 
@@ -253,8 +257,8 @@ public class MonthStatFragment extends Fragment {
         for(int i=0;i<thisday.size();i++){
             if(thisday.get(i).getSuccess() != 0){
 
-                thisfocustime += (thisday.get(i).getDuration()*(thisday.get(i).getFocus()/(float)100));
-                thisnotFocustime += (thisday.get(i).getDuration() - (thisday.get(i).getDuration()*(thisday.get(i).getFocus()/(float)100)));
+                thisTime += thisday.get(i).getDuration();
+                thisFocus += thisday.get(i).getFocus();
                 if(thisday.get(i).getSuccess() == 1){
                     thisSuccess += 1.0f;
                 }else{
@@ -266,15 +270,16 @@ public class MonthStatFragment extends Fragment {
         }
 
         //집중시간만
-        values.add(new Entry(3, thisfocustime));
+        values.add(new Entry(3, thisTime));
         data.add(new BarEntry(2, new float[]{thisSuccess,thisFail}));
-        ft+= thisfocustime;
-        nft += thisnotFocustime;
+        ft+= thisTime;
+        af += thisFocus;
+        allCount += thisday.size();
 
 
         //22일~마지막날 데이터 (+29,30,31)
-        thisfocustime = 0.0f;
-        thisnotFocustime = 0.0f;
+        thisTime = 0.0f;
+        thisFocus = 0.0f;
         thisSuccess = 0.0f;
         thisFail = 0.0f;
 
@@ -287,8 +292,8 @@ public class MonthStatFragment extends Fragment {
         for(int i=0;i<thisday.size();i++){
             if(thisday.get(i).getSuccess() != 0){
 
-                thisfocustime += (thisday.get(i).getDuration()*(thisday.get(i).getFocus()/(float)100));
-                thisnotFocustime += (thisday.get(i).getDuration() - (thisday.get(i).getDuration()*(thisday.get(i).getFocus()/(float)100)));
+                thisTime += thisday.get(i).getDuration();
+                thisFocus += thisday.get(i).getFocus();
 
                 if(thisday.get(i).getSuccess() == 1){
                     thisSuccess += 1.0f;
@@ -300,15 +305,20 @@ public class MonthStatFragment extends Fragment {
         }
 
         //집중시간만
-        values.add(new Entry(4, thisfocustime));
+        values.add(new Entry(4, thisTime));
         data.add(new BarEntry(3, new float[]{thisSuccess,thisFail}));
-        ft+= thisfocustime;
-        nft += thisnotFocustime;
+        ft+= thisTime;
+        af += thisFocus;
+        allCount += thisday.size();
+
+        //평균 집중력
+        int mf = (int) (af/allCount);
+
 
         values.add(new Entry(5, 0.0f));
 
         focusTime.setText(getIntToTimeString((int)ft));
-        allTime.setText(getIntToTimeString((int)(ft+nft)));
+        allTime.setText(mf +"%");
 
 
         System.out.println("바데이터" + data);
@@ -320,23 +330,17 @@ public class MonthStatFragment extends Fragment {
         lineDataSet.setDrawIcons(false);
         //lineDataSet.setColor(Color.TRANSPARENT);
 
-        lineDataSet.setCircleColors(Color.TRANSPARENT,Color.RED,Color.RED,Color.RED,Color.RED,Color.TRANSPARENT);
+        lineDataSet.setCircleColors(Color.TRANSPARENT,Color.GREEN,Color.GREEN,Color.GREEN,Color.GREEN,Color.TRANSPARENT);
         lineDataSet.setCircleRadius(3f);
         lineDataSet.setDrawValues(false);
         lineDataSet.setDrawHorizontalHighlightIndicator(false);
         lineDataSet.setDrawVerticalHighlightIndicator(false);
 
-        lineDataSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
+        lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
 
         lineDataSet.setDrawFilled(true);
-        if (Utils.getSDKInt() >= 18) {
-            // fill drawable only supported on api level 18 and above
-            Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.gradiant);
-            lineDataSet.setFillDrawable(drawable);
-        }
-        else {
-            lineDataSet.setFillColor(Color.RED);
-        }
+        lineDataSet.setFillColor(getColor(mf));
+
 
 
         LineData lineData = new LineData(lineDataSet);
@@ -371,7 +375,7 @@ public class MonthStatFragment extends Fragment {
         //bardata1.setHighlightEnabled(false);
 
         // successBarChart.setExtraTopOffset(30);
-       // TimeLineChart.setMarker(new SuccessStackedBarsMarkerView(getContext(),R.layout.custom_marker_view_layout));
+        TimeLineChart.setMarker(new TimeMarkerView(getContext(),R.layout.custom_marker_view_layout));
         TimeLineChart.getAxisLeft().setAxisMinimum(0.0f);
         TimeLineChart.getDescription().setEnabled(false);
         TimeLineChart.getLegend().setEnabled(false);
@@ -435,7 +439,26 @@ public class MonthStatFragment extends Fragment {
 
 
     }
+    private int getColor(int af) {
 
+        System.out.println("평균 집중력" + af);
+        //평균 집중력
+        if(af >= 90){
+            return Color.rgb(60,124,31);
+        }
+        if(af >= 70){
+            return Color.rgb(88,147,56);
+        }
+        if(af >= 50){
+            return Color.rgb(125,177,89);
+        }
+        if(af >= 30){
+            return Color.rgb(167,210,127);
+        }
+
+
+        return Color.rgb(201,238,157);
+    }
 
     //현재 날짜 토요일
     private Date getLastDay(){

@@ -368,7 +368,6 @@ public class MakePlanActivity extends AppCompatActivity {
                 int sec = (int) (diff / 1000);
                 plansRealmResults.get(pos).setDuration(sec);
 
-
             }
             } );
 

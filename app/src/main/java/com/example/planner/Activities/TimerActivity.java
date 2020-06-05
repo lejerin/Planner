@@ -16,8 +16,10 @@ import android.widget.Toast;
 import com.example.planner.Helpers.FocusDialog;
 import com.example.planner.Helpers.FocusFinishDialog;
 import com.example.planner.Helpers.FocusTimerDialog;
+import com.example.planner.Helpers.MySoundPlayer;
 import com.example.planner.R;
 import com.example.planner.Realm.Plans;
+import com.example.planner.Realm.User;
 import com.example.planner.TimerView;
 
 import java.text.DateFormat;
@@ -197,11 +199,13 @@ public class TimerActivity extends AppCompatActivity {
 
     //시간 종료 되었을 때
     private void finishTime(){
-
         if(focusDialog != null){
             focusDialog.cancelDialog();
         }
 
+//        //소리 알림음
+//        MySoundPlayer.initSounds(getApplicationContext());
+//        MySoundPlayer.play(MySoundPlayer.SUCCESS);
 
         if(extendChance < 3) {
 
@@ -222,11 +226,22 @@ public class TimerActivity extends AppCompatActivity {
                                 plan.setDuration(getNewDuration(new Date()));
                                 plan.setStartTime(startPlanTime);
                                 plan.setEndTime(new Date());
+                              //  finish();
+
+                            }
+                        });
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+
+
+                                User user = realm.where(User.class).findFirst();
+                                user.setSuccess(user.getSuccess() + 1);
+                                user.setTime(user.getTime() + getNewDuration(new Date()));
                                 finish();
 
                             }
                         });
-
 
                     }
                 }
@@ -316,10 +331,23 @@ public class TimerActivity extends AppCompatActivity {
                                             plan.setDuration(getNewDuration(new Date()));
                                             plan.setStartTime(startPlanTime);
                                             plan.setEndTime(new Date());
+                                          //  finish();
+
+                                        }
+                                    });
+                                    realm.executeTransaction(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm) {
+
+
+                                            User user = realm.where(User.class).findFirst();
+                                          //  user.setSuccess(user.getSuccess() + 1);
+                                            user.setTime(user.getTime() + getNewDuration(new Date()));
                                             finish();
 
                                         }
                                     });
+
                                 }
                             }, 0);
 
@@ -349,6 +377,19 @@ public class TimerActivity extends AppCompatActivity {
                                         plan.setDuration(getNewDuration(new Date()));
                                         plan.setStartTime(startPlanTime);
                                         plan.setEndTime(new Date());
+                                     //   finish();
+
+                                    }
+                                });
+
+                                realm.executeTransaction(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+
+
+                                        User user = realm.where(User.class).findFirst();
+                                        //  user.setSuccess(user.getSuccess() + 1);
+                                        user.setTime(user.getTime() + getNewDuration(new Date()));
                                         finish();
 
                                     }
@@ -390,10 +431,24 @@ public class TimerActivity extends AppCompatActivity {
                             plan.setDuration(getNewDuration(new Date()));
                             plan.setStartTime(startPlanTime);
                             plan.setEndTime(new Date());
-                            finish();
+                          //  finish();
                         }
                     });
 
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+
+
+                            User user = realm.where(User.class).findFirst();
+                            if(isSuccess){
+                                user.setSuccess(user.getSuccess() + 1);
+                            }
+                            user.setTime(user.getTime() + getNewDuration(new Date()));
+                            finish();
+
+                        }
+                    });
 
                 }
             }

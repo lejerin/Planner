@@ -1,7 +1,6 @@
 package com.example.planner.fragment;
 
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,42 +10,20 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.planner.Helpers.MyYAxisValueFormatter;
-import com.example.planner.Helpers.SuccessStackedBarsMarkerView;
-import com.example.planner.Helpers.SuccessYAxisValueFormatter;
-import com.example.planner.Helpers.TimeStackedBarsMarkerView;
 import com.example.planner.R;
 import com.example.planner.Realm.Plans;
-import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.utils.Utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
-import io.realm.Sort;
 
 public class DayStatFragment extends Fragment {
 

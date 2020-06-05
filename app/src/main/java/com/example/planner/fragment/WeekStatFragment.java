@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment;
 import com.example.planner.Helpers.MyYAxisValueFormatter;
 import com.example.planner.Helpers.SuccessStackedBarsMarkerView;
 import com.example.planner.Helpers.SuccessYAxisValueFormatter;
-import com.example.planner.Helpers.TimeStackedBarsMarkerView;
+import com.example.planner.Helpers.TimeMarkerView;
 import com.example.planner.R;
 import com.example.planner.Realm.Plans;
 import com.github.mikephil.charting.charts.BarChart;
@@ -48,8 +48,7 @@ public class WeekStatFragment extends Fragment {
 
     private Date thisDate = new Date();
 
-    private int[] colors = new int[]{Color.rgb(253, 154, 188)
-            , Color.rgb(171, 171, 171)};
+
 
     public WeekStatFragment() {
 
@@ -119,6 +118,7 @@ public class WeekStatFragment extends Fragment {
 
     private void setProgressBar(){
         int success = 0, fail = 0;
+        int focus = 0;
 
         for (int i=0; i<plans.size();i++){
             if(plans.get(i).getSuccess() == 1){
@@ -126,7 +126,15 @@ public class WeekStatFragment extends Fragment {
             }else if(plans.get(i).getSuccess() == 2){
                 fail++;
             }
+            focus += plans.get(i).getFocus();
         }
+
+        if(focus != 0){
+            allTime.setText((int)focus/plans.size() + "%");
+        }else{
+            allTime.setText("0%");
+        }
+
 
         int percent =  (int)( (double)success/ (double)(success+fail) * 100.0 );
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -143,9 +151,11 @@ public class WeekStatFragment extends Fragment {
     private void setTimeBarChart(Date startDay){
 
         ArrayList<BarEntry> data = new ArrayList<>();
+        ArrayList<Integer> colors = new ArrayList<Integer>();
         Calendar day = Calendar.getInstance();
 
-        float ft = 0.0f, nft = 0.0f;
+        float at = 0.0f;
+        int af = 0;
 
 
         for(int i=0;i<7;i++){
@@ -155,28 +165,29 @@ public class WeekStatFragment extends Fragment {
             RealmResults<Plans> thisday = realm.where(Plans.class).equalTo("timeText", changeDateToStr(day.getTime()))
                     .sort("startTime", Sort.ASCENDING).findAll();
 
-            float thisfocustime = 0.0f;
-            float thisnotFocustime = 0.0f;
+            float thistime = 0.0f;
+            float thisfocus = 0.0f;
 
             for(int j=0;j<thisday.size();j++){
 
                 //미실행한 계획이 아닐경우에만
                 if(thisday.get(j).getSuccess() != 0){
 
-                thisfocustime += (thisday.get(j).getDuration()*(thisday.get(j).getFocus()/(float)100));
-                thisnotFocustime += (thisday.get(j).getDuration() - (thisday.get(j).getDuration()*(thisday.get(j).getFocus()/(float)100)));
-                }
+                    thistime += thisday.get(j).getDuration();
+                    thisfocus += thisday.get(j).getFocus();
+                  }
             }
 
-
-            data.add(new BarEntry(i, new float[]{thisfocustime,thisnotFocustime}));
-            ft+= thisfocustime;
-            nft += thisnotFocustime;
+            data.add(new BarEntry(i, new float[]{thistime}));
+            System.out.println(thisfocus);
+            int aa = (int) (thisfocus/thisday.size());
+            colors.add(getBarColor(aa));
+            at+= thistime;
+            af += aa;
         }
 
 
-        focusTime.setText(getIntToTimeString((int)ft));
-        allTime.setText(getIntToTimeString((int)(ft+nft)));
+        focusTime.setText(getIntToTimeString((int)at));
 
 
         BarDataSet barDataSet = new BarDataSet(data,"");
@@ -204,7 +215,7 @@ public class WeekStatFragment extends Fragment {
 
         //bardata1.setHighlightEnabled(false);
 
-        timeBarChart.setMarker(new TimeStackedBarsMarkerView(getContext(),R.layout.custom_marker_view_layout));
+        timeBarChart.setMarker(new TimeMarkerView(getContext(),R.layout.custom_marker_view_layout));
 
 
         timeBarChart.getAxisLeft().setAxisMinimum(0.0f);
@@ -218,6 +229,27 @@ public class WeekStatFragment extends Fragment {
 
 
 
+    }
+
+    private int getBarColor(int af) {
+
+        System.out.println("평균 집중력" + af);
+        //평균 집중력
+        if(af >= 90){
+            return Color.rgb(60,124,31);
+        }
+        if(af >= 70){
+            return Color.rgb(88,147,56);
+        }
+        if(af >= 50){
+            return Color.rgb(125,177,89);
+        }
+        if(af >= 30){
+            return Color.rgb(167,210,127);
+        }
+
+
+        return Color.rgb(201,238,157);
     }
 
     private void setSuccessBarChart(Date startDay){
@@ -258,6 +290,8 @@ public class WeekStatFragment extends Fragment {
 
 
         BarDataSet barDataSet = new BarDataSet(data,"");
+        int[] colors = new int[]{Color.rgb(253, 154, 188)
+                , Color.rgb(171, 171, 171)};
         barDataSet.setColors(colors);
         BarData barData = new BarData(barDataSet);
         barData.setDrawValues(false);
