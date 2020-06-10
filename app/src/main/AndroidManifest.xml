@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name = "android.permission.VIBRATE"/>
 
 
     <application
@@ -15,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.TimerActivity"></activity>
+        <activity android:name=".Activities.GiftActivity"></activity>
+        <activity android:name=".Activities.TimerActivity" />
         <activity android:name=".Activities.MakePlanActivity" />
         <activity android:name=".Activities.PostActivity" />
         <activity android:name=".Activities.PostDetailActivity" />
@@ -29,18 +31,14 @@
             </intent-filter>
         </activity>
 
-
-        <receiver android:name=".Alarm.DeviceBootReceiver"
+        <receiver
+            android:name=".Alarm.DeviceBootReceiver"
             android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
         <receiver android:name=".Alarm.AlarmReceiver" />
-
-
-
     </application>
 
 </manifest>

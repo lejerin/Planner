@@ -43,6 +43,10 @@ public class MyApplication extends Application {
                 }
             });
             prefs.edit().putBoolean("isFirstRun", false).apply();
+
+            prefs.edit().putInt("sound", 1).apply();
+            prefs.edit().putInt("vibrate", 1).apply();
+
         }
     }
 

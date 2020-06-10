@@ -41,6 +41,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         String name = intent.getExtras().getString("name");
         System.out.println("리시버 id" + id + " 이름: " + name);
 
+
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Intent notificationIntent = new Intent(context, LoginActivity.class);
 
@@ -74,11 +75,16 @@ public class AlarmReceiver extends BroadcastReceiver {
             channel.setLightColor(Color.RED);
             channel.enableVibration(true);
             channel.setVibrationPattern(new long[]{0,500,1000});
+
+
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                     .setUsage(AudioAttributes.USAGE_ALARM)
                     .build();
+
             channel.setSound(soundUri, audioAttributes);
+
+
 
 
 
@@ -99,10 +105,10 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setContentTitle(name + " 계획 시작")
                 .setContentText("타이머를 시작해주세요")
                 .setContentInfo("INFO")
-                .setVibrate(new long[]{0, 500, 1000})
                 .setDefaults(Notification.DEFAULT_LIGHTS )
+                .setContentIntent(pendingI)
                 .setSound(soundUri)
-                .setContentIntent(pendingI);
+                .setVibrate(new long[]{0, 500, 1000});
 
 
         if (notificationManager != null) {

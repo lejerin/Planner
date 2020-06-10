@@ -2,12 +2,18 @@ package com.example.planner.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.media.AudioManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.media.SoundPool;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,7 +22,6 @@ import android.widget.Toast;
 import com.example.planner.Helpers.FocusDialog;
 import com.example.planner.Helpers.FocusFinishDialog;
 import com.example.planner.Helpers.FocusTimerDialog;
-import com.example.planner.Helpers.MySoundPlayer;
 import com.example.planner.R;
 import com.example.planner.Realm.Plans;
 import com.example.planner.Realm.User;
@@ -27,8 +32,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import io.realm.Realm;
 
@@ -48,6 +51,8 @@ public class TimerActivity extends AppCompatActivity {
 
     private int extendChance = 0;
     String timeText;
+
+    int isSound,isvibrate;
 
     private CountDownTimer countDownTimer;
     @Override
@@ -95,6 +100,10 @@ public class TimerActivity extends AppCompatActivity {
         int sec = (int) (diff / 1000);
         initializeTimer(sec);
 
+
+        SharedPreferences prefs = getSharedPreferences("Pref", MODE_PRIVATE);
+        isSound = prefs.getInt("sound", 1);
+        isvibrate = prefs.getInt("vibrate", 1);
 
 
         //포기 버튼
@@ -203,9 +212,8 @@ public class TimerActivity extends AppCompatActivity {
             focusDialog.cancelDialog();
         }
 
-//        //소리 알림음
-//        MySoundPlayer.initSounds(getApplicationContext());
-//        MySoundPlayer.play(MySoundPlayer.SUCCESS);
+        //소리 알림음
+        startSound();
 
         if(extendChance < 3) {
 
@@ -485,6 +493,20 @@ public class TimerActivity extends AppCompatActivity {
         long diff =  endDate.getTime() - startPlanTime.getTime();
         int sec = (int) (diff / 1000);
         return sec;
+    }
+
+    private void startSound(){
+
+        if(isSound==1){
+            Uri soundUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.alertsound);
+            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), soundUri);
+            r.play();
+        }
+        if(isvibrate==1){
+            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            vibrator.vibrate(500); // 0.5초간 진동
+        }
+
     }
 
 }

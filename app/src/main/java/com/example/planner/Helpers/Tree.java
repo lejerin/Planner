@@ -19,6 +19,12 @@ public class Tree {
     public Tree() {
 
     }
+    public int getPoint(int successCount, int timeCount){
+        timeCount = timeCount/3600;
+        int point = successCount + timeCount;
+
+        return point;
+    }
 
     public int getNowTree(int successCount, int timeCount){
 

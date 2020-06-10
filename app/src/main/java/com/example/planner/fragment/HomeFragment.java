@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.planner.Activities.GiftActivity;
 import com.example.planner.Activities.TimerActivity;
 import com.example.planner.Helpers.Tree;
 import com.example.planner.R;
@@ -140,7 +141,16 @@ public class HomeFragment extends Fragment {
         User user = realm.where(User.class).findFirst();
         Tree treeData = new Tree();
         tree.setImageResource(treeData.getNowTree(user.getSuccess(), user.getTime()));
+        final int point = treeData.getPoint(user.getSuccess(), user.getTime());
 
+        tree.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent giftActivity = new Intent(getContext(), GiftActivity.class);
+                giftActivity.putExtra("point", point);
+                startActivity(giftActivity);
+            }
+        });
 
 
         timerBtn.setOnClickListener(new View.OnClickListener() {
@@ -959,5 +969,6 @@ public class HomeFragment extends Fragment {
 
         return dateFormat.format(date);
     }
+
 
 }

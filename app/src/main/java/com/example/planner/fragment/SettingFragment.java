@@ -3,12 +3,15 @@ package com.example.planner.fragment;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -19,6 +22,8 @@ import com.example.planner.Activities.LoginActivity;
 import com.example.planner.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /*
 
@@ -36,7 +41,7 @@ public class SettingFragment extends Fragment {
     public SettingFragment() {
 
     }
-
+    SharedPreferences prefs;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,9 +57,50 @@ public class SettingFragment extends Fragment {
 
         logoutBtn = view.findViewById(R.id.logoutBtn);
 
+        prefs = getContext().getSharedPreferences("Pref", MODE_PRIVATE);
+
+        Switch soundSwitch = view.findViewById(R.id.switchSound);
+        soundSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = prefs.edit();
+
+                if(isChecked){
+                    editor.putInt("sound", 1);
+                }else{
+                    editor.putInt("sound", 0);
+                }
+                editor.commit();
+            }
+        });
+
+
+        Switch vibrateSwitch = view.findViewById(R.id.switch2);
+        vibrateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = prefs.edit();
+
+                if(isChecked){
+                    editor.putInt("vibrate", 1);
+                }else{
+                    editor.putInt("vibrate", 0);
+                }
+                editor.commit();
+            }
+        });
 
 
 
+
+        int isSound = prefs.getInt("sound", 1);
+        int isvibrate = prefs.getInt("vibrate", 1);
+        if(isSound == 1){
+            soundSwitch.setChecked(true);
+        }
+        if(isvibrate == 1){
+            vibrateSwitch.setChecked(true);
+        }
         setUserInfo();
 
 
