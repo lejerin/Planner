@@ -34,7 +34,7 @@ public class TodayDecorator implements DayViewDecorator {
     public void decorate(DayViewFacade view) {
         view.addSpan(new StyleSpan(Typeface.BOLD));
       //  view.addSpan(new RelativeSizeSpan(1.4f));
-        view.addSpan(new ForegroundColorSpan(Color.BLUE));
+        view.addSpan(new ForegroundColorSpan(Color.rgb(61,204,142)));
      //   view.setBackgroundDrawable(drawable);
     }
 

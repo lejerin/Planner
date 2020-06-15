@@ -56,8 +56,8 @@ public class MonthStatFragment extends Fragment {
 
     private Date thisDate = new Date();
 
-    private int[] colors = new int[]{Color.rgb(253, 154, 188)
-            , Color.rgb(171, 171, 171)};
+    private int[] colors = new int[]{Color.rgb(235,162,201)
+            , Color.rgb(189, 189, 189)};
 
     public MonthStatFragment() {
 

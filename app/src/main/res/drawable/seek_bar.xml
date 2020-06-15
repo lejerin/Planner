@@ -14,7 +14,7 @@
             <shape
                 android:shape="line">
                 <stroke
-                    android:color="@color/seek_bar_progress"
+                    android:color="@color/lightMainColor"
                     android:width="@dimen/seek_bar_thickness"/>
             </shape>
         </clip>

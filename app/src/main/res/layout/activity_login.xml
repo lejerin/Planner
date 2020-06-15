@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ACF0D9">
+    android:background="@color/lightMainColor">
 
     <ImageView
         android:id="@+id/loginPhoto"
@@ -52,9 +52,10 @@
         android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:background="@drawable/reg_btn_style"
+        android:background="@drawable/reg_btn_style_white"
         android:text="Login"
-        android:textColor="@color/white"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -76,6 +77,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="회원가입"
+        android:textStyle="bold"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

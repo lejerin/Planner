@@ -44,16 +44,16 @@ public class MakePlanActivity extends AppCompatActivity {
 
 
     private AutoCompleteTextView planTitle;
-    private TextView makePlanDate,saveBtn;
+    private TextView makePlanDate,saveBtn,spinnerText;
     private Button startTimeBtn,endTimeBtn;
     private Spinner planSpinner;
     private String date;
     private Date startDate, endDate;
     private RealmResults<Plans> plansRealmResults,getAllPlans;
-
+    Realm realm;
     int pos = -1;
-
     int planId = 1;
+    int repeat = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +67,8 @@ public class MakePlanActivity extends AppCompatActivity {
         makePlanDate = findViewById(R.id.makePlanDate);
         startTimeBtn = findViewById(R.id.startTimeBtn);
         endTimeBtn = findViewById(R.id.endTimeBtn);
-       // planSpinner = findViewById(R.id.planSpinner);
+        planSpinner = findViewById(R.id.planSpinner);
+        spinnerText = findViewById(R.id.spinnerText);
         saveBtn = findViewById(R.id.saveBtn);
         ImageButton makePlanbackBtn = findViewById(R.id.makePlanbackBtn);
 
@@ -75,7 +76,7 @@ public class MakePlanActivity extends AppCompatActivity {
         date = getIntent().getExtras().getString("date");
         makePlanDate.setText(date);
 
-        Realm realm = Realm.getDefaultInstance();
+        realm = Realm.getDefaultInstance();
 
         final List<String> getTitle = new ArrayList<String>();
         //자동완성 리스트 불러오기
@@ -127,6 +128,12 @@ public class MakePlanActivity extends AppCompatActivity {
             startTimeBtn.setText(changeDateToStr(startDate));
             endDate = plansRealmResults.get(pos).getEndTime();
             endTimeBtn.setText(changeDateToStr(endDate));
+
+            //반복설정 안보이게
+            spinnerText.setVisibility(View.GONE);
+            planSpinner.setVisibility(View.GONE);
+
+
         }else{
             Number maxId = realm.where(Plans.class).max("id");
             planId = (maxId == null) ? 1 : maxId.intValue() + 1;
@@ -222,6 +229,21 @@ public class MakePlanActivity extends AppCompatActivity {
         });
 
 
+
+
+        //반복설정
+        planSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                repeat = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
     }
 
 
@@ -300,6 +322,21 @@ public class MakePlanActivity extends AppCompatActivity {
         return true;
     }
 
+//    private boolean checkTimeAllDuple(Date check){
+//
+//        RealmResults<Plans> allResult = realm.where(Plans.class).greaterThan("startTime",startDate).findAll();
+//
+//
+//        for(int i=0;i<plansRealmResults.size();i++) {
+//
+//
+//
+//        }
+//
+//
+//        return true;
+//    }
+
     //String -> Date
     private Date stringToDate(int hour, int min){
         String from = date  + " " + hour+":" + min + ":" + "00";
@@ -328,27 +365,104 @@ public class MakePlanActivity extends AppCompatActivity {
 
         if(pos == -1){
 
-        realm.executeTransaction(new Realm.Transaction() { @Override public void execute(Realm realm) {
+            realm.executeTransaction(new Realm.Transaction() { @Override public void execute(Realm realm) {
 
-            Number maxId = realm.where(Plans.class).max("id");
-            // If there are no rows, currentId is null, so the next id must be 1
-            // If currentId is not null, increment it by 1
-            int nextId = (maxId == null) ? 1 : maxId.intValue() + 1;
-            // User object created with the new Primary key
+                Number maxId = realm.where(Plans.class).max("id");
+                // If there are no rows, currentId is null, so the next id must be 1
+                // If currentId is not null, increment it by 1
+                int nextId = (maxId == null) ? 1 : maxId.intValue() + 1;
+                // User object created with the new Primary key
 
-            Plans plan = realm.createObject(Plans.class,nextId);
-            plan.setTitle(planTitle.getText().toString());
-            plan.setTimeText(date);
-            plan.setStartTime(startDate);
-            plan.setEndTime(endDate);
-            String monthNumber  = (String) DateFormat.format("yyyy-MM",   startDate);
-            plan.setyearMonth(monthNumber);
+                Plans plan = realm.createObject(Plans.class,nextId);
+                plan.setTitle(planTitle.getText().toString());
+                plan.setTimeText(date);
+                plan.setStartTime(startDate);
+                plan.setEndTime(endDate);
+                plan.setRepeat(repeat);
+                String monthNumber  = (String) DateFormat.format("yyyy-MM",   startDate);
+                plan.setyearMonth(monthNumber);
 
-            long diff =  endDate.getTime() - startDate.getTime();
-            int sec = (int) (diff / 1000);
-            plan.setDuration(sec);
-        }
-        } );
+                long diff =  endDate.getTime() - startDate.getTime();
+                int sec = (int) (diff / 1000);
+                plan.setDuration(sec);
+
+            }
+            } );
+
+            //반복설정일시
+            if(repeat == 1){
+                Calendar start = Calendar.getInstance();
+                Calendar end = Calendar.getInstance();
+                start.setTime(startDate);
+                end.setTime(endDate);
+                for(int i=0;i<7;i++){
+                    start.add(Calendar.DATE, 1);
+                    final Date repeatStrat = start.getTime();
+                    end.add(Calendar.DATE, 1);
+                    final Date repeatEnd = end.getTime();
+
+                    realm.executeTransaction(new Realm.Transaction() { @Override public void execute(Realm realm) {
+
+                        Number maxId = realm.where(Plans.class).max("id");
+                        // If there are no rows, currentId is null, so the next id must be 1
+                        // If currentId is not null, increment it by 1
+                        int nextId = (maxId == null) ? 1 : maxId.intValue() + 1;
+                        // User object created with the new Primary key
+
+                        Plans plan = realm.createObject(Plans.class,nextId);
+                        plan.setTitle(planTitle.getText().toString());
+                        plan.setTimeText(changeDateToStrRepeat(repeatStrat));
+                        plan.setStartTime(repeatStrat);
+                        plan.setEndTime(repeatEnd);
+                        plan.setRepeat(repeat);
+                        String monthNumber  = (String) DateFormat.format("yyyy-MM",   repeatStrat);
+                        plan.setyearMonth(monthNumber);
+
+                        long diff =  repeatEnd.getTime() - repeatStrat.getTime();
+                        int sec = (int) (diff / 1000);
+                        plan.setDuration(sec);
+
+                    }
+                    } );
+                }
+
+            }else if(repeat == 2){
+                Calendar start = Calendar.getInstance();
+                Calendar end = Calendar.getInstance();
+                start.setTime(startDate);
+                end.setTime(endDate);
+                for(int i=0;i<5;i++){
+                    start.add(Calendar.DATE, 7);
+                    final Date repeatStrat = start.getTime();
+                    end.add(Calendar.DATE, 7);
+                    final Date repeatEnd = end.getTime();
+
+                    realm.executeTransaction(new Realm.Transaction() { @Override public void execute(Realm realm) {
+
+                        Number maxId = realm.where(Plans.class).max("id");
+                        // If there are no rows, currentId is null, so the next id must be 1
+                        // If currentId is not null, increment it by 1
+                        int nextId = (maxId == null) ? 1 : maxId.intValue() + 1;
+                        // User object created with the new Primary key
+
+                        Plans plan = realm.createObject(Plans.class,nextId);
+                        plan.setTitle(planTitle.getText().toString());
+                        plan.setTimeText(changeDateToStrRepeat(repeatStrat));
+                        plan.setStartTime(repeatStrat);
+                        plan.setEndTime(repeatEnd);
+                        plan.setRepeat(repeat);
+                        String monthNumber  = (String) DateFormat.format("yyyy-MM",   repeatStrat);
+                        plan.setyearMonth(monthNumber);
+
+                        long diff =  repeatEnd.getTime() - repeatStrat.getTime();
+                        int sec = (int) (diff / 1000);
+                        plan.setDuration(sec);
+
+                    }
+                    } );
+                }
+            }
+
 
         }else{
             //수정
@@ -363,7 +477,7 @@ public class MakePlanActivity extends AppCompatActivity {
                 plansRealmResults.get(pos).setEndTime(endDate);
                 String monthNumber  = (String) DateFormat.format("yyyy-MM",   startDate);
                 plansRealmResults.get(pos).setyearMonth(monthNumber);
-
+                plansRealmResults.get(pos).setRepeat(repeat);
                 long diff =  endDate.getTime() - startDate.getTime();
                 int sec = (int) (diff / 1000);
                 plansRealmResults.get(pos).setDuration(sec);
@@ -386,5 +500,11 @@ public class MakePlanActivity extends AppCompatActivity {
         }
 
         return false;
+    }
+
+    //날짜(Date) -> String
+    private String changeDateToStrRepeat(Date date) {
+        SimpleDateFormat transFormat = new SimpleDateFormat("EE, MM월 dd일 yyyy년");
+        return transFormat.format(date);
     }
 }

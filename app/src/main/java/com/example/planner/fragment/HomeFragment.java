@@ -9,8 +9,8 @@ import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -35,6 +35,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -68,7 +69,7 @@ public class HomeFragment extends Fragment {
     private ArrayList<String> holeAmString = new ArrayList<>();
     private ArrayList<String> holePmString = new ArrayList<>();
 
-    private TextView holeTextView,timeStatus, timeTop, timeRight, timeBottom, timeLeft;
+    private TextView holeTextView, timeTop, timeRight, timeBottom, timeLeft;
     private String todayNotYear= "";
 
     private TextView startPlanTitle;
@@ -105,7 +106,6 @@ public class HomeFragment extends Fragment {
         timeRight = view.findViewById(R.id.timeRight);
         timeBottom = view.findViewById(R.id.timeBottom);
         timeLeft = view.findViewById(R.id.timeLeft);
-        timeStatus = view.findViewById(R.id.timeStatus);
         timerBtn = view.findViewById(R.id.timerBtn);
         startPlanTitle = view.findViewById(R.id.startPlanTitle);
         tree = view.findViewById(R.id.tree);
@@ -149,6 +149,32 @@ public class HomeFragment extends Fragment {
                 Intent giftActivity = new Intent(getContext(), GiftActivity.class);
                 giftActivity.putExtra("point", point);
                 startActivity(giftActivity);
+            }
+        });
+
+
+        RadioGroup radioGroup = view.findViewById(R.id.radioGroup1);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId)
+            {
+
+                switch (checkedId)
+                {
+                    case R.id.radioAll:
+                        pieChart.callOnClick();
+                        break;
+                    case R.id.radioAm:
+                        amPie.callOnClick();
+                        break;
+                    case R.id.radioPm:
+                        pmPie.callOnClick();
+                        break;
+                    default:
+                        break;
+                }
+
             }
         });
 
@@ -864,20 +890,22 @@ public class HomeFragment extends Fragment {
 
     private int getColor(int i){
 
-        switch (i%5){
-            case 0:
-                return Color.rgb(40, 155, 246);
-            case 1:
-                return Color.rgb(148, 212, 212);
-            case 2:
-                return Color.rgb(136, 180, 187);
-            case 3:
-                return Color.rgb(118, 174, 175);
-            case 4:
-                return Color.rgb(42, 109, 130);
-            default:
-                return Color.rgb(207, 248, 246);
-        }
+//        switch (i%5){
+//            case 0:
+//                return Color.rgb(40, 155, 246);
+//            case 1:
+//                return Color.rgb(148, 212, 212);
+//            case 2:
+//                return Color.rgb(136, 180, 187);
+//            case 3:
+//                return Color.rgb(118, 174, 175);
+//            case 4:
+//                return Color.rgb(42, 109, 130);
+//            default:
+//                return Color.rgb(207, 248, 246);
+//        }
+
+        return Color.rgb(99,164,221);
 
     }
 
@@ -886,7 +914,6 @@ public class HomeFragment extends Fragment {
         timeRight.setVisibility(View.INVISIBLE);
         timeBottom.setVisibility(View.INVISIBLE);
         timeLeft.setVisibility(View.INVISIBLE);
-        timeStatus.setVisibility(View.INVISIBLE);
         holeTextView.setVisibility(View.INVISIBLE);
     }
 
@@ -906,25 +933,25 @@ public class HomeFragment extends Fragment {
                 timeRight.setText("3");
                 timeBottom.setText("6");
                 timeLeft.setText("9");
-                timeStatus.setText("AM");
+
                 break;
             case "pm":
                 timeTop.setText("12");
                 timeRight.setText("3");
                 timeBottom.setText("6");
                 timeLeft.setText("9");
-                timeStatus.setText("PM");
+
                 break;
             default:
                 timeTop.setText("12");
                 timeRight.setText("6");
                 timeBottom.setText("12");
                 timeLeft.setText("6");
-                timeStatus.setText("ALL");
+
                 break;
         }
 
-        timeStatus.setVisibility(View.VISIBLE);
+
 
     }
 

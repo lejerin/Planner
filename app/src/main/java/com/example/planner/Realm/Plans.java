@@ -13,6 +13,7 @@ public class Plans extends RealmObject {
     // 시작시간, 종료시간, 총 소요시간
     // 성공 여부 0: 시작안함 / 1: 성공 / 2: 실패
     // 집중도
+    //반복설정 0:반복없음 / 1: 매일 / 2: 매주
 
     @PrimaryKey
     private int id; //기본키
@@ -21,6 +22,24 @@ public class Plans extends RealmObject {
     private int duration; //초 단위
     private int isSuccess = 0;
     private int focus = 0;
+    private int repeat = 0;
+
+
+    public int getIsSuccess() {
+        return isSuccess;
+    }
+
+    public void setIsSuccess(int isSuccess) {
+        this.isSuccess = isSuccess;
+    }
+
+    public int getRepeat() {
+        return repeat;
+    }
+
+    public void setRepeat(int repeat) {
+        this.repeat = repeat;
+    }
 
     public int getId() {
         return id;

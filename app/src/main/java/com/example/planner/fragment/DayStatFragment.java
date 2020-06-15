@@ -38,7 +38,7 @@ public class DayStatFragment extends Fragment {
 
     private Date thisDate = new Date();
 
-    private int[] colors = new int[]{Color.rgb(253, 154, 188)
+    private int[] colors = new int[]{Color.rgb(44, 127, 199)
             , Color.rgb(171, 171, 171)};
 
     public DayStatFragment() {

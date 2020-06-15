@@ -1,5 +1,6 @@
 package com.example.planner.Alarm;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -13,6 +14,7 @@ import android.graphics.Color;
 import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
@@ -32,13 +34,16 @@ import io.realm.Realm;
 import static android.content.Context.MODE_PRIVATE;
 
 public class AlarmReceiver extends BroadcastReceiver {
-
+    int id = 0;
+    int repeat = 0;
+    String name = "";
 
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        int id = intent.getExtras().getInt("id");
-        String name = intent.getExtras().getString("name");
+        id = intent.getExtras().getInt("id");
+        repeat = intent.getExtras().getInt("repeat");
+        name = intent.getExtras().getString("name");
         System.out.println("리시버 id" + id + " 이름: " + name);
 
 
@@ -129,6 +134,35 @@ public class AlarmReceiver extends BroadcastReceiver {
 //            Date currentDateTime = nextNotifyTime.getTime();
 //            String date_text = new SimpleDateFormat("yyyy년 MM월 dd일 EE요일 a hh시 mm분 ", Locale.getDefault()).format(currentDateTime);
             Toast.makeText(context.getApplicationContext(),name + "계획 타이머를 시작해주세요", Toast.LENGTH_SHORT).show();
+
+            if(repeat > 0){
+                Intent alarmIntent = new Intent(context, AlarmReceiver.class);
+                alarmIntent.putExtra("id", id);
+                alarmIntent.putExtra("name",name);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, alarmIntent, 0);
+                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                if(repeat == 1){
+                    //매일
+                    if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+                        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+(24*60*60*1000),pendingIntent);
+                    }else{
+                        alarmManager.setExact(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+(24*60*60*1000),pendingIntent);
+                    }
+
+                }else{
+                    //2일때 매주
+                    if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+                        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+(7*24*60*60*1000),pendingIntent);
+                    }else{
+                        alarmManager.setExact(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+(7*24*60*60*1000),pendingIntent);
+                    }
+                }
+            }
+
+
         }
     }
+
+
+
 }

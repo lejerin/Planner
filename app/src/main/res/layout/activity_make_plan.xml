@@ -89,27 +89,27 @@
         app:layout_constraintStart_toEndOf="@+id/makePlanDate"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/textView4"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="8dp"-->
-<!--        android:layout_marginTop="32dp"-->
-<!--        android:text="반복 설정"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/startTimeBtn" />-->
+    <TextView
+        android:id="@+id/spinnerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:text="반복 설정"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/startTimeBtn" />
 
-<!--    <Spinner-->
-<!--        android:id="@+id/planSpinner"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="8dp"-->
-<!--        android:entries="@array/weekday"-->
-<!--        android:layout_marginEnd="8dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/textView4"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/textView4"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/textView4" />-->
+    <Spinner
+        android:id="@+id/planSpinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:entries="@array/weekday"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/spinnerText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/spinnerText"
+        app:layout_constraintTop_toTopOf="@+id/spinnerText" />
 
     <TextView
         android:id="@+id/saveBtn"
@@ -122,4 +122,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/makePlanbackBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

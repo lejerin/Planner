@@ -56,6 +56,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:mcv_dateTextAppearance="@color/colorPrimary"
             app:mcv_calendarMode="month"
             app:mcv_selectionColor="#75FFB700"
             app:mcv_showOtherDates="defaults">

@@ -290,8 +290,10 @@ public class WeekStatFragment extends Fragment {
 
 
         BarDataSet barDataSet = new BarDataSet(data,"");
-        int[] colors = new int[]{Color.rgb(253, 154, 188)
-                , Color.rgb(171, 171, 171)};
+        int[] colors = new int[]{Color.rgb(235,162,201)
+                , Color.rgb(189, 189, 189)};
+
+
         barDataSet.setColors(colors);
         BarData barData = new BarData(barDataSet);
         barData.setDrawValues(false);

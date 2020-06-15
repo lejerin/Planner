@@ -63,7 +63,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
                     .into(holder.imgCommentUser);
         }else{
             Glide.with(mContext)
-                    .load(R.drawable.profile)
+                    .load(R.drawable.success_emotion)
                     .apply(new RequestOptions().centerCrop().circleCrop())
                     .into(holder.imgCommentUser);
         }

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.TimerActivity">
+    tools:context=".Activities.TimerActivity"
+    android:background="@color/white">
 
 
     <com.example.planner.TimerView
@@ -131,8 +132,9 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
         android:text="포기"
-        android:textColor="@color/white"
         android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/textColor"
         android:background="@drawable/timer_btn_style"
         app:layout_constraintBottom_toBottomOf="@+id/view5"
         app:layout_constraintEnd_toStartOf="@+id/view5"
@@ -144,8 +146,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:text="완료"
-        android:textColor="@color/white"
         android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/textColor"
         android:background="@drawable/timer_btn_style"
         app:layout_constraintBottom_toBottomOf="@+id/view5"
         app:layout_constraintStart_toEndOf="@+id/view5"
@@ -170,6 +173,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/timer"
+        android:tint="#EF4F4F"
         app:layout_constraintVertical_bias="0.7"
         app:srcCompat="@drawable/heart" />
 

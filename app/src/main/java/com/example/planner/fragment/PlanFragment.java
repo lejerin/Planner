@@ -3,13 +3,11 @@ package com.example.planner.fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,7 +27,6 @@ import com.example.planner.Helpers.SundayDecorator;
 import com.example.planner.Helpers.TodayDecorator;
 import com.example.planner.R;
 import com.example.planner.Realm.Plans;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -67,7 +64,7 @@ public class PlanFragment extends Fragment{
     List<CalendarDay> markCalendars = new ArrayList<>();
 
     private Realm realm;
-    private RealmResults<Plans> plansRealmResults,thisYearMonthPlan;
+    private RealmResults<Plans> plansRealmResults, allPlan;
     private PlanAdapter adapter;
 
 
@@ -100,8 +97,9 @@ public class PlanFragment extends Fragment{
         setUpRecyclerView();
 
 
-        thisYearMonthPlan = realm.where(Plans.class).equalTo("yearMonth",thisYearMonth)
-                .sort("startTime", Sort.ASCENDING).findAll();
+//        thisYearMonthPlan = realm.where(Plans.class).equalTo("yearMonth",thisYearMonth)
+//                .sort("startTime", Sort.ASCENDING).findAll();
+        allPlan = realm.where(Plans.class).sort("startTime", Sort.ASCENDING).findAll();
 
         //캘린더에 마커 색깔 추가하기
         setUpMonthPlanColor();
@@ -225,10 +223,10 @@ public class PlanFragment extends Fragment{
     private void setUpMonthPlanColor() {
 
         String from = "";
-        for(int i=0;i<thisYearMonthPlan.size();i++){
+        for(int i = 0; i< allPlan.size(); i++){
             //같은 날짜 중복인건 제외
-            if(!from.equals(thisYearMonthPlan.get(i).getTimeText() +" 10:10:10")){
-                from = thisYearMonthPlan.get(i).getTimeText() +" 10:10:10";
+            if(!from.equals(allPlan.get(i).getTimeText() +" 10:10:10")){
+                from = allPlan.get(i).getTimeText() +" 10:10:10";
                 SimpleDateFormat transFormat = new SimpleDateFormat("EE, MM월 dd일 yyyy년 HH:mm:ss");
                 try {
                     Date to = transFormat.parse(from);
@@ -294,7 +292,7 @@ public class PlanFragment extends Fragment{
             Calendar cal = Calendar.getInstance();
             if(plans.getStartTime().getTime() - new Date().getTime() > 0){
                 cal.setTime(plans.getStartTime());
-                ((HomeActivity)getActivity()).diaryNotification(cal,plans.getId(),plans.getTitle());
+                ((HomeActivity)getActivity()).diaryNotification(cal,plans.getId(),plans.getTitle(),plans.getRepeat());
             }
 
 
@@ -310,7 +308,7 @@ public class PlanFragment extends Fragment{
 
             if(plans.getStartTime().getTime() - new Date().getTime() > 0){
                 cal.setTime(plans.getStartTime());
-                ((HomeActivity)getActivity()).diaryNotification(cal,plans.getId(),plans.getTitle());
+                ((HomeActivity)getActivity()).diaryNotification(cal,plans.getId(),plans.getTitle(),plans.getRepeat());
             }
 
 

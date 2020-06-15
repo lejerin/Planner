@@ -6,8 +6,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -103,7 +101,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
-    public void diaryNotification(Calendar calendar, int code, String name)
+    public void diaryNotification(Calendar calendar, int code, String name, int repeat)
     {
 //        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 //        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -115,6 +113,7 @@ public class HomeActivity extends AppCompatActivity {
         Intent alarmIntent = new Intent(this, AlarmReceiver.class);
         alarmIntent.putExtra("id", code);
         alarmIntent.putExtra("name",name);
+        alarmIntent.putExtra("repeat",repeat);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, code, alarmIntent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
