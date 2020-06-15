@@ -329,20 +329,34 @@ public class MonthStatFragment extends Fragment {
 
         lineDataSet.setDrawIcons(false);
         //lineDataSet.setColor(Color.TRANSPARENT);
+        int lineFillColor = Color.rgb(127,199,44);
 
-        lineDataSet.setCircleColors(Color.TRANSPARENT,Color.GREEN,Color.GREEN,Color.GREEN,Color.GREEN,Color.TRANSPARENT);
+        lineDataSet.setCircleColors(Color.TRANSPARENT,lineFillColor,lineFillColor,lineFillColor,lineFillColor,Color.TRANSPARENT);
         lineDataSet.setCircleRadius(3f);
         lineDataSet.setDrawValues(false);
         lineDataSet.setDrawHorizontalHighlightIndicator(false);
         lineDataSet.setDrawVerticalHighlightIndicator(false);
 
-        lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+//        lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+//
+//        lineDataSet.setDrawFilled(true);
+//        lineDataSet.setFillColor(getColor(mf));
+
+
+        lineDataSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
 
         lineDataSet.setDrawFilled(true);
-        lineDataSet.setFillColor(getColor(mf));
+        if (Utils.getSDKInt() >= 18) {
+            // fill drawable only supported on api level 18 and above
+            Drawable drawable = ContextCompat.getDrawable(getContext(), getColor(mf));
+            lineDataSet.setFillDrawable(drawable);
+        }
+        else {
+            lineDataSet.setFillColor(lineFillColor);
+        }
 
 
-
+        lineDataSet.setColor(lineFillColor);
         LineData lineData = new LineData(lineDataSet);
         TimeLineChart.setData(lineData);
 
@@ -444,20 +458,20 @@ public class MonthStatFragment extends Fragment {
         System.out.println("평균 집중력" + af);
         //평균 집중력
         if(af >= 90){
-            return Color.rgb(60,124,31);
+            return R.drawable.gradiant5;
         }
         if(af >= 70){
-            return Color.rgb(88,147,56);
+            return R.drawable.gradiant4;
         }
         if(af >= 50){
-            return Color.rgb(125,177,89);
+            return R.drawable.gradiant3;
         }
         if(af >= 30){
-            return Color.rgb(167,210,127);
+            return R.drawable.gradiant2;
         }
 
 
-        return Color.rgb(201,238,157);
+        return R.drawable.gradiant1;
     }
 
     //현재 날짜 토요일

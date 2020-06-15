@@ -395,7 +395,7 @@ public class MakePlanActivity extends AppCompatActivity {
                 Calendar end = Calendar.getInstance();
                 start.setTime(startDate);
                 end.setTime(endDate);
-                for(int i=0;i<7;i++){
+                for(int i=0;i<6;i++){
                     start.add(Calendar.DATE, 1);
                     final Date repeatStrat = start.getTime();
                     end.add(Calendar.DATE, 1);
@@ -431,7 +431,7 @@ public class MakePlanActivity extends AppCompatActivity {
                 Calendar end = Calendar.getInstance();
                 start.setTime(startDate);
                 end.setTime(endDate);
-                for(int i=0;i<5;i++){
+                for(int i=0;i<4;i++){
                     start.add(Calendar.DATE, 7);
                     final Date repeatStrat = start.getTime();
                     end.add(Calendar.DATE, 7);

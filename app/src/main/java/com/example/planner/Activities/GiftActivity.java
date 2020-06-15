@@ -18,8 +18,16 @@ public class GiftActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gift);
 
         TextView pointText = findViewById(R.id.point);
+        TextView successText = findViewById(R.id.userSuccessCount);
+        TextView allTimeText = findViewById(R.id.userAllTime);
+
         int point = getIntent().getExtras().getInt("point");
+        int success = getIntent().getExtras().getInt("success");
+        int allTime = getIntent().getExtras().getInt("allTime");
+
         pointText.setText(point+"점");
+        successText.setText(success+"");
+        allTimeText.setText(allTime/3600 + "시간");
 
         ImageView gift1_1 = findViewById(R.id.gift1_1);
         ImageView gift1_2 = findViewById(R.id.gift1_2);
@@ -90,4 +98,6 @@ public class GiftActivity extends AppCompatActivity {
         });
 
     }
+
+
 }

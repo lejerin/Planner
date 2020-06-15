@@ -3,8 +3,8 @@
 
     <string-array name="weekday">
         <item>사용 안 함</item>
-        <item>매일</item>
-        <item>매주</item>
+        <item>매일(7일동안)</item>
+        <item>매주(5주동안)</item>
 
     </string-array>
 

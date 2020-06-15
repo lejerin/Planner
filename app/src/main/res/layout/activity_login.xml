@@ -13,6 +13,7 @@
         android:scaleType="fitXY"
         android:layout_marginTop="100dp"
         android:src="@drawable/icon_sprout"
+        android:tint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

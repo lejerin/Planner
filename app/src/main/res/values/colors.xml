@@ -20,6 +20,13 @@
     <color name="stack_positive">#FD9ABC</color>
 
     <color name="seek_bar_background">#ababab</color>
-    <color name="seek_bar_progress">#ffb600</color>
+    <color name="seek_bar_progress">#98D84E</color>
     <color name="seek_bar_secondary_progress">#3399CC</color>
+
+    <color name="focusColor1">#C9EE9D</color>
+    <color name="focusColor2">#A7D27F</color>
+    <color name="focusColor3">#7DB159</color>
+    <color name="focusColor4">#589338</color>
+    <color name="focusColor5">#3C7C1F</color>
+
 </resources>

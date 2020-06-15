@@ -140,13 +140,17 @@ public class HomeFragment extends Fragment {
         //사용자 보상 데이터 갖고오기
         User user = realm.where(User.class).findFirst();
         Tree treeData = new Tree();
-        tree.setImageResource(treeData.getNowTree(user.getSuccess(), user.getTime()));
-        final int point = treeData.getPoint(user.getSuccess(), user.getTime());
+        final int success = user.getSuccess();
+        final int allTime = user.getTime();
+        tree.setImageResource(treeData.getNowTree(success, allTime));
+        final int point = treeData.getPoint(success, allTime);
 
         tree.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent giftActivity = new Intent(getContext(), GiftActivity.class);
+                giftActivity.putExtra("success", success);
+                giftActivity.putExtra("allTime", allTime);
                 giftActivity.putExtra("point", point);
                 startActivity(giftActivity);
             }
