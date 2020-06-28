@@ -104,7 +104,7 @@ public class MakePlanSearchDialog extends Dialog{
             second = "0" + second;
         }
 
-        return hour+"시간 " + min + "분";
+        return hour+"시간 " + min + "분" + second +"초";
     }
 
     public void cancelDialog(){

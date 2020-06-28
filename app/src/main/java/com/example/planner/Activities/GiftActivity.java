@@ -25,6 +25,7 @@ public class GiftActivity extends AppCompatActivity {
         int success = getIntent().getExtras().getInt("success");
         int allTime = getIntent().getExtras().getInt("allTime");
 
+
         pointText.setText(point+"점");
         successText.setText(success+"");
         allTimeText.setText(allTime/3600 + "시간");

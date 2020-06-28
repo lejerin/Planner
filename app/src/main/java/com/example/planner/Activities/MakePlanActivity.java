@@ -262,10 +262,10 @@ public class MakePlanActivity extends AppCompatActivity {
 
         for(int i=0;i<rp.size();i++){
             if(rp.get(i).getSuccess() == 1){
-                success += (rp.get(i).getDuration()*(rp.get(i).getFocus()/(float)100));
+                success += (rp.get(i).getDuration());
                 successCount++;
             }else if(rp.get(i).getSuccess() == 2){
-                fail += (rp.get(i).getDuration()*(rp.get(i).getFocus()/(float)100));
+                fail += (rp.get(i).getDuration());
                 failCount++;
             }else{
                 notStart += (rp.get(i).getDuration());
