@@ -2,10 +2,10 @@
 
 새싹플래너 - 사위일체
 =============
-시연영상 링크  
+## 시연영상 링크
 https://drive.google.com/file/d/1jRifQYH1oljmTmRKFEvoM2qF2Xklpfli/view?usp=sharing  
 
-=============
+-------------
 기능
 -------------
 
